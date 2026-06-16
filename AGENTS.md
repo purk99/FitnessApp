@@ -35,6 +35,12 @@ Common commands:
 - `xcodebuild -scheme FitnessApp -destination 'platform=iOS Simulator,name=iPhone 16' build` - builds from the command line.
 - `xcodebuild test -scheme FitnessApp -destination 'platform=iOS Simulator,name=iPhone 16'` - runs tests.
 
+Simulator refresh workflow:
+
+- If the Simulator is still showing an older app version, quit the running FitnessApp instance in the Simulator first.
+- Build the latest project version, then install and launch the freshly built app in the booted Simulator.
+- Prefer a targeted app quit/build/run cycle before trying broader cleanup such as deleting DerivedData, resetting the Simulator, or changing project settings.
+
 Keep the project buildable after every change.
 
 ## Coding Style & Naming Conventions

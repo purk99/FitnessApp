@@ -10,6 +10,7 @@
 		7D6F0C322C1A540100F1A001 /* FitnessAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F0C302C1A540100F1A001 /* FitnessAppApp.swift */; };
 		7D6F0C332C1A540100F1A001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F0C312C1A540100F1A001 /* ContentView.swift */; };
 		7D6F0C342C1A540100F1A001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D6F0C352C1A540100F1A001 /* Assets.xcassets */; };
+		7D6F0C3E2C1A650100F1A001 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F0C3D2C1A650100F1A001 /* Workout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,6 +18,7 @@
 		7D6F0C302C1A540100F1A001 /* FitnessAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FitnessAppApp.swift; sourceTree = "<group>"; };
 		7D6F0C312C1A540100F1A001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7D6F0C352C1A540100F1A001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7D6F0C3D2C1A650100F1A001 /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,9 +53,18 @@
 			children = (
 				7D6F0C302C1A540100F1A001 /* FitnessAppApp.swift */,
 				7D6F0C312C1A540100F1A001 /* ContentView.swift */,
+				7D6F0C3C2C1A650100F1A001 /* Models */,
 				7D6F0C352C1A540100F1A001 /* Assets.xcassets */,
 			);
 			path = FitnessApp;
+			sourceTree = "<group>";
+		};
+		7D6F0C3C2C1A650100F1A001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7D6F0C3D2C1A650100F1A001 /* Workout.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,6 +137,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D6F0C322C1A540100F1A001 /* FitnessAppApp.swift in Sources */,
+				7D6F0C3E2C1A650100F1A001 /* Workout.swift in Sources */,
 				7D6F0C332C1A540100F1A001 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
