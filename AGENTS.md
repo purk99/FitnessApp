@@ -32,8 +32,8 @@ Use Xcode for the primary development workflow. Once an `.xcodeproj` or `.xcwork
 Common commands:
 
 - `open FitnessApp.xcodeproj` - opens the app in Xcode when the project exists.
-- `xcodebuild -scheme FitnessApp -destination 'platform=iOS Simulator,name=iPhone 16' build` - builds from the command line.
-- `xcodebuild test -scheme FitnessApp -destination 'platform=iOS Simulator,name=iPhone 16'` - runs tests.
+- `xcodebuild -scheme FitnessApp -destination 'platform=iOS Simulator,name=iPhone 17' build` - builds from the command line.
+- `xcodebuild test -scheme FitnessApp -destination 'platform=iOS Simulator,name=iPhone 17'` - runs tests.
 
 Simulator refresh workflow:
 

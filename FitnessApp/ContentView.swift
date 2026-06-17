@@ -11,6 +11,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
+    @AppStorage("customExerciseTemplates") private var customExerciseTemplatesData = "[]"
 
     @State private var selectedTab: AppTab = .home
     @State private var activeWorkout: Workout?
@@ -19,10 +20,11 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {
-                HomeView(lastWorkout: workouts.first) {
-                    activeWorkout = Workout(date: Date())
-                    selectedTab = .log
-                }
+                HomeView(
+                    lastWorkout: workouts.first,
+                    startWorkout: startWorkout,
+                    continueWorkout: continueWorkout
+                )
             }
             .tabItem {
                 Label("Home", systemImage: "house.fill")
@@ -30,7 +32,14 @@ struct ContentView: View {
             .tag(AppTab.home)
 
             NavigationStack {
-                WorkoutLoggingView(workout: $activeWorkout, finishWorkout: finishWorkout)
+                WorkoutLoggingView(
+                    workout: $activeWorkout,
+                    workouts: workouts,
+                    exerciseTemplates: exerciseTemplates,
+                    finishWorkout: finishWorkout,
+                    saveExerciseTemplate: saveExerciseTemplate,
+                    continueWorkout: continueWorkout
+                )
             }
             .tabItem {
                 Label("Loggen", systemImage: "clipboard")
@@ -66,8 +75,33 @@ struct ContentView: View {
         )
     }
 
+    private var exerciseTemplates: [ExerciseTemplatePreset] {
+        ExerciseTemplatePreset.standardTemplates + customExerciseTemplates
+    }
+
+    private var customExerciseTemplates: [ExerciseTemplatePreset] {
+        guard let data = customExerciseTemplatesData.data(using: .utf8),
+              let templates = try? JSONDecoder().decode([ExerciseTemplatePreset].self, from: data) else {
+            return []
+        }
+
+        return templates.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+    }
+
+    private func startWorkout() {
+        activeWorkout = Workout(date: Date())
+        selectedTab = .log
+    }
+
+    private func continueWorkout(_ workout: Workout) {
+        activeWorkout = workout
+        selectedTab = .log
+    }
+
     private func finishWorkout(_ workout: Workout) {
-        modelContext.insert(workout)
+        if workouts.contains(where: { $0.id == workout.id }) == false {
+            modelContext.insert(workout)
+        }
 
         do {
             try modelContext.save()
@@ -77,6 +111,58 @@ struct ContentView: View {
             saveErrorMessage = error.localizedDescription
         }
     }
+
+    private func saveExerciseTemplate(_ name: String) {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedName.isEmpty == false else { return }
+
+        let alreadyExists = exerciseTemplates.contains {
+            $0.name.compare(trimmedName, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame
+        }
+        guard alreadyExists == false else { return }
+
+        var templates = customExerciseTemplates
+        templates.append(
+            ExerciseTemplatePreset(
+                name: trimmedName,
+                category: "Eigene",
+                isCustom: true
+            )
+        )
+
+        if let data = try? JSONEncoder().encode(templates),
+           let encodedTemplates = String(data: data, encoding: .utf8) {
+            customExerciseTemplatesData = encodedTemplates
+        }
+    }
+}
+
+private struct ExerciseTemplatePreset: Identifiable, Codable, Hashable {
+    var id: String { "\(category)-\(name)" }
+    let name: String
+    let category: String
+    let isCustom: Bool
+
+    init(name: String, category: String, isCustom: Bool = false) {
+        self.name = name
+        self.category = category
+        self.isCustom = isCustom
+    }
+
+    static let standardTemplates: [ExerciseTemplatePreset] = [
+        ExerciseTemplatePreset(name: "Bankdrücken", category: "Brust"),
+        ExerciseTemplatePreset(name: "Schrägbankdrücken", category: "Brust"),
+        ExerciseTemplatePreset(name: "Kniebeuge", category: "Beine"),
+        ExerciseTemplatePreset(name: "Beinpresse", category: "Beine"),
+        ExerciseTemplatePreset(name: "Kreuzheben", category: "Rücken"),
+        ExerciseTemplatePreset(name: "Latzug", category: "Rücken"),
+        ExerciseTemplatePreset(name: "Kabelzug Rudern", category: "Rücken"),
+        ExerciseTemplatePreset(name: "Klimmzüge", category: "Rücken"),
+        ExerciseTemplatePreset(name: "Schulterdrücken", category: "Schultern"),
+        ExerciseTemplatePreset(name: "Seitheben", category: "Schultern"),
+        ExerciseTemplatePreset(name: "Trizepsdrücken am Kabelzug", category: "Arme"),
+        ExerciseTemplatePreset(name: "Bizepscurls", category: "Arme")
+    ]
 }
 
 private enum AppTab {
@@ -88,6 +174,7 @@ private enum AppTab {
 private struct HomeView: View {
     let lastWorkout: Workout?
     let startWorkout: () -> Void
+    let continueWorkout: (Workout) -> Void
 
     var body: some View {
         ZStack {
@@ -98,7 +185,10 @@ private struct HomeView: View {
                 VStack(alignment: .leading, spacing: 26) {
                     HeaderView()
                     StartWorkoutButton(action: startWorkout)
-                    LastWorkoutCard(workout: lastWorkout)
+                    LastWorkoutCard(
+                        workout: lastWorkout,
+                        continueWorkout: continueWorkout
+                    )
                     ProgressCard()
                 }
                 .padding(.horizontal, 24)
@@ -150,6 +240,7 @@ private struct StartWorkoutButton: View {
 
 private struct LastWorkoutCard: View {
     let workout: Workout?
+    let continueWorkout: (Workout) -> Void
 
     var body: some View {
         DashboardCard {
@@ -172,7 +263,13 @@ private struct LastWorkoutCard: View {
                         MetadataRow(systemName: "figure.strengthtraining.traditional", text: summaryText)
                     }
 
-                    LinkRow(title: "Fortsetzen")
+                    LinkRow(title: "Fortsetzen") {
+                        if let workout {
+                            continueWorkout(workout)
+                        }
+                    }
+                    .disabled(workout == nil)
+                    .opacity(workout == nil ? 0.45 : 1)
                         .padding(.top, 12)
                 }
             }
@@ -292,10 +389,15 @@ private struct MetadataRow: View {
 
 private struct LinkRow: View {
     let title: String
+    let action: () -> Void
+
+    init(title: String, action: @escaping () -> Void = {}) {
+        self.title = title
+        self.action = action
+    }
 
     var body: some View {
-        Button {
-        } label: {
+        Button(action: action) {
             HStack(spacing: 14) {
                 Text(title)
                     .font(.system(size: 18, weight: .medium))
@@ -345,19 +447,42 @@ private struct ProgressRow: Identifiable {
 
 private struct WorkoutLoggingView: View {
     @Binding var workout: Workout?
+    let workouts: [Workout]
+    let exerciseTemplates: [ExerciseTemplatePreset]
     let finishWorkout: (Workout) -> Void
+    let saveExerciseTemplate: (String) -> Void
+    let continueWorkout: (Workout) -> Void
+    @State private var historyFilter: WorkoutHistoryFilter = .all
 
     var body: some View {
         ZStack {
             AppColor.pageBackground
                 .ignoresSafeArea()
 
-            if workout == nil {
-                EmptyWorkoutView {
-                    workout = Workout(date: Date())
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 22) {
+                    if workout == nil {
+                        EmptyWorkoutView {
+                            workout = Workout(date: Date())
+                        }
+                    } else if let workout {
+                        WorkoutEditorView(
+                            workout: workout,
+                            exerciseTemplates: exerciseTemplates,
+                            finishWorkout: finishWorkout,
+                            saveExerciseTemplate: saveExerciseTemplate
+                        )
+                    }
+
+                    WorkoutHistorySection(
+                        workouts: workouts,
+                        selectedFilter: $historyFilter,
+                        continueWorkout: continueWorkout
+                    )
                 }
-            } else if let workout {
-                WorkoutEditorView(workout: workout, finishWorkout: finishWorkout)
+                .padding(.horizontal, 20)
+                .padding(.top, 18)
+                .padding(.bottom, 120)
             }
         }
         .navigationTitle("Workout")
@@ -385,39 +510,45 @@ private struct EmptyWorkoutView: View {
 
             StartWorkoutButton(action: startWorkout)
         }
-        .padding(.horizontal, 24)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 32)
     }
 }
 
 private struct WorkoutEditorView: View {
     @Bindable var workout: Workout
+    let exerciseTemplates: [ExerciseTemplatePreset]
     let finishWorkout: (Workout) -> Void
+    let saveExerciseTemplate: (String) -> Void
     @State private var newExerciseName = ""
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 22) {
-                WorkoutSummaryCard(workout: workout)
-                AddExerciseCard(newExerciseName: $newExerciseName, addExercise: addExercise)
+        VStack(alignment: .leading, spacing: 22) {
+            WorkoutSummaryCard(workout: workout)
 
-                ForEach(workout.exercises) { exercise in
-                    ExerciseLoggingCard(
-                        exercise: exercise,
-                        deleteExercise: { deleteExercise(exercise.id) }
-                    )
-                }
-
-                if workout.exercises.isEmpty {
-                    EmptyExerciseHint()
-                }
-
-                FinishWorkoutButton {
-                    finishWorkout(workout)
-                }
+            ForEach(workout.exercises) { exercise in
+                ExerciseLoggingCard(
+                    exercise: exercise,
+                    deleteExercise: { deleteExercise(exercise.id) }
+                )
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 18)
-            .padding(.bottom, 120)
+
+            if workout.exercises.isEmpty {
+                EmptyExerciseHint()
+            }
+
+            AddExerciseCard(
+                newExerciseName: $newExerciseName,
+                templates: exerciseTemplates,
+                addExercise: addExercise,
+                addTemplateExercise: addTemplateExercise,
+                saveTemplate: saveTemplate,
+                canSaveTemplate: canSaveTemplate
+            )
+
+            FinishWorkoutButton {
+                finishWorkout(workout)
+            }
         }
     }
 
@@ -427,6 +558,25 @@ private struct WorkoutEditorView: View {
 
         workout.exercises.append(WorkoutExercise(name: trimmedName))
         newExerciseName = ""
+    }
+
+    private func addTemplateExercise(_ template: ExerciseTemplatePreset) {
+        workout.exercises.append(WorkoutExercise(name: template.name))
+    }
+
+    private var canSaveTemplate: Bool {
+        let trimmedName = newExerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedName.isEmpty == false else { return false }
+
+        return exerciseTemplates.contains {
+            $0.name.compare(trimmedName, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame
+        } == false
+    }
+
+    private func saveTemplate() {
+        let trimmedName = newExerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard canSaveTemplate else { return }
+        saveExerciseTemplate(trimmedName)
     }
 
     private func deleteExercise(_ exerciseID: UUID) {
@@ -528,14 +678,82 @@ private struct StatPill: View {
 
 private struct AddExerciseCard: View {
     @Binding var newExerciseName: String
+    let templates: [ExerciseTemplatePreset]
     let addExercise: () -> Void
+    let addTemplateExercise: (ExerciseTemplatePreset) -> Void
+    let saveTemplate: () -> Void
+    let canSaveTemplate: Bool
+
+    private var groupedTemplates: [(category: String, templates: [ExerciseTemplatePreset])] {
+        Dictionary(grouping: templates, by: \.category)
+            .map { category, templates in
+                (
+                    category,
+                    templates.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+                )
+            }
+            .sorted { lhs, rhs in
+                categorySortValue(lhs.category) < categorySortValue(rhs.category)
+            }
+    }
 
     var body: some View {
         DashboardCard {
-            VStack(alignment: .leading, spacing: 14) {
-                Text("Übung hinzufügen")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(.primaryText)
+            VStack(alignment: .leading, spacing: 16) {
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Übung hinzufügen")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(.primaryText)
+
+                        Text("Vorlage wählen oder eigene Übung eintragen.")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.secondaryText)
+                    }
+
+                    Spacer()
+
+                    Menu {
+                        ForEach(groupedTemplates, id: \.category) { group in
+                            Section(group.category) {
+                                ForEach(group.templates) { template in
+                                    Button(template.name) {
+                                        addTemplateExercise(template)
+                                    }
+                                }
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "list.bullet")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(AppColor.trainingGreen)
+                            .frame(width: 42, height: 42)
+                            .background(AppColor.inputBackground)
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    }
+                    .accessibilityLabel("Übungsvorlagen öffnen")
+                }
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(templates.prefix(8)) { template in
+                            Button {
+                                addTemplateExercise(template)
+                            } label: {
+                                Text(template.name)
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundStyle(AppColor.trainingGreen)
+                                    .lineLimit(1)
+                                    .padding(.horizontal, 14)
+                                    .frame(height: 38)
+                                    .background(AppColor.inputBackground)
+                                    .clipShape(Capsule())
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("\(template.name) hinzufügen")
+                        }
+                    }
+                }
 
                 HStack(spacing: 12) {
                     TextField("z. B. Bankdrücken", text: $newExerciseName)
@@ -557,8 +775,31 @@ private struct AddExerciseCard: View {
                     .buttonStyle(.plain)
                     .accessibilityLabel("Übung hinzufügen")
                 }
+
+                Button(action: saveTemplate) {
+                    Label("Als Vorlage speichern", systemImage: "bookmark")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(AppColor.trainingGreen)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 42)
+                        .background(AppColor.inputBackground)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+                .buttonStyle(.plain)
+                .disabled(canSaveTemplate == false)
+                .opacity(canSaveTemplate ? 1 : 0.45)
+                .accessibilityLabel("Übung als Vorlage speichern")
             }
         }
+    }
+
+    private func categorySortValue(_ category: String) -> String {
+        let order = ["Brust", "Beine", "Rücken", "Schultern", "Arme", "Eigene"]
+        guard let index = order.firstIndex(of: category) else {
+            return "9-\(category)"
+        }
+
+        return "\(index)-\(category)"
     }
 }
 
@@ -603,15 +844,23 @@ private struct ExerciseLoggingCard: View {
                     }
                 }
 
-                Button(action: addSet) {
-                    HStack(spacing: 10) {
-                        Image(systemName: "plus.circle.fill")
-                        Text("Set hinzufügen")
+                HStack(spacing: 12) {
+                    Button(action: addSet) {
+                        Label("Set", systemImage: "plus.circle.fill")
+                            .frame(maxWidth: .infinity)
                     }
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(AppColor.trainingGreen)
+                    .buttonStyle(ExerciseActionButtonStyle())
+                    .accessibilityLabel("Leeres Set hinzufügen")
+
+                    Button(action: copyPreviousSet) {
+                        Label("Vorheriges", systemImage: "arrow.down.doc.fill")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(ExerciseActionButtonStyle())
+                    .disabled(canCopyPreviousSet == false)
+                    .opacity(canCopyPreviousSet ? 1 : 0.45)
+                    .accessibilityLabel("Vorherige Set-Werte übernehmen")
                 }
-                .buttonStyle(.plain)
 
                 TextField("Notiz zur Übung", text: $exercise.notes, axis: .vertical)
                     .lineLimit(1...3)
@@ -627,9 +876,43 @@ private struct ExerciseLoggingCard: View {
         exercise.sets.append(SetEntry())
     }
 
+    private var canCopyPreviousSet: Bool {
+        guard let previousSet = exercise.sets.last else {
+            return false
+        }
+
+        return previousSet.weight != nil || previousSet.reps != nil
+    }
+
+    private func copyPreviousSet() {
+        guard let previousSet = exercise.sets.last else {
+            return
+        }
+
+        exercise.sets.append(
+            SetEntry(
+                weight: previousSet.weight,
+                reps: previousSet.reps
+            )
+        )
+    }
+
     private func deleteSet(_ setID: UUID) {
         guard exercise.sets.count > 1 else { return }
         exercise.sets.removeAll { $0.id == setID }
+    }
+}
+
+private struct ExerciseActionButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundStyle(AppColor.trainingGreen)
+            .padding(.horizontal, 12)
+            .frame(height: 44)
+            .background(AppColor.inputBackground)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .opacity(configuration.isPressed ? 0.72 : 1)
     }
 }
 
@@ -764,6 +1047,475 @@ private struct EmptyExerciseHint: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 26)
+    }
+}
+
+private enum WorkoutHistoryFilter: String, CaseIterable, Identifiable {
+    case all = "Alle"
+    case year = "Jahr"
+    case month = "Monat"
+    case week = "Woche"
+
+    var id: String { rawValue }
+}
+
+private struct WorkoutHistorySection: View {
+    let workouts: [Workout]
+    @Binding var selectedFilter: WorkoutHistoryFilter
+    let continueWorkout: (Workout) -> Void
+
+    private let columns = [
+        GridItem(.adaptive(minimum: 155), spacing: 14)
+    ]
+
+    private var filteredWorkouts: [Workout] {
+        workouts.filter { workout in
+            selectedFilter.contains(workout.date)
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("Letzte Workouts")
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(.primaryText)
+
+                    Text("\(filteredWorkouts.count) Einträge")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(.secondaryText)
+                }
+
+                Spacer()
+            }
+
+            Picker("Zeitraum", selection: $selectedFilter) {
+                ForEach(WorkoutHistoryFilter.allCases) { filter in
+                    Text(filter.rawValue).tag(filter)
+                }
+            }
+            .pickerStyle(.segmented)
+
+            if filteredWorkouts.isEmpty {
+                EmptyWorkoutHistoryCard(filter: selectedFilter)
+            } else {
+                LazyVGrid(columns: columns, spacing: 14) {
+                    ForEach(filteredWorkouts) { workout in
+                        NavigationLink {
+                            WorkoutDetailView(
+                                workout: workout,
+                                continueWorkout: continueWorkout
+                            )
+                        } label: {
+                            WorkoutHistoryTile(workout: workout)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct WorkoutDetailView: View {
+    @Environment(\.dismiss) private var dismiss
+    let workout: Workout
+    let continueWorkout: (Workout) -> Void
+
+    var body: some View {
+        ZStack {
+            AppColor.pageBackground
+                .ignoresSafeArea()
+
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 18) {
+                    WorkoutReadOnlySummaryCard(workout: workout)
+
+                    if workout.exercises.isEmpty {
+                        EmptyReadOnlyExercisesCard()
+                    } else {
+                        ForEach(workout.exercises) { exercise in
+                            ReadOnlyExerciseCard(exercise: exercise)
+                        }
+                    }
+
+                    Button {
+                        continueWorkout(workout)
+                        dismiss()
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "pencil.circle.fill")
+                                .font(.system(size: 21, weight: .semibold))
+
+                            Text("Fortsetzen / bearbeiten")
+                                .font(.system(size: 18, weight: .semibold))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 58)
+                        .foregroundStyle(.white)
+                        .background(AppColor.trainingGreen)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Workout fortsetzen oder bearbeiten")
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 18)
+                .padding(.bottom, 120)
+            }
+        }
+        .navigationTitle(workoutTitle)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var workoutTitle: String {
+        let trimmedTitle = workout.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmedTitle.isEmpty ? "Workout" : trimmedTitle
+    }
+}
+
+private struct WorkoutReadOnlySummaryCard: View {
+    let workout: Workout
+
+    var body: some View {
+        DashboardCard {
+            VStack(alignment: .leading, spacing: 18) {
+                HStack(alignment: .top, spacing: 16) {
+                    IconBadge(systemName: "figure.strengthtraining.traditional")
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(workoutTitle)
+                            .font(.system(size: 26, weight: .bold))
+                            .foregroundStyle(.primaryText)
+
+                        Text(workout.date.formatted(date: .abbreviated, time: .omitted))
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(.secondaryText)
+                    }
+                }
+
+                HStack(spacing: 12) {
+                    StatPill(title: "Übungen", value: "\(workout.exercises.count)")
+                    StatPill(title: "Sets", value: "\(workout.totalSets)")
+                    StatPill(title: "Volumen", value: volumeText)
+                }
+
+                if workout.notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
+                    Text(workout.notes)
+                        .font(.system(size: 15))
+                        .foregroundStyle(.secondaryText)
+                        .padding(14)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(AppColor.inputBackground)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+            }
+        }
+    }
+
+    private var workoutTitle: String {
+        let trimmedTitle = workout.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmedTitle.isEmpty ? "Workout" : trimmedTitle
+    }
+
+    private var volumeText: String {
+        guard workout.totalVolume > 0 else { return "0 kg" }
+        return "\(Int(workout.totalVolume.rounded())) kg"
+    }
+}
+
+private struct ReadOnlyExerciseCard: View {
+    let exercise: WorkoutExercise
+
+    var body: some View {
+        DashboardCard {
+            VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(exerciseTitle)
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(.primaryText)
+
+                    Text("\(exercise.sets.count) Sets")
+                        .font(.system(size: 15))
+                        .foregroundStyle(.secondaryText)
+                }
+
+                VStack(spacing: 10) {
+                    HStack(spacing: 10) {
+                        Text("Set")
+                            .frame(width: 34, alignment: .leading)
+                        Text("kg")
+                            .frame(maxWidth: .infinity)
+                        Text("Wdh.")
+                            .frame(maxWidth: .infinity)
+                        Text("Volumen")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondaryText)
+
+                    ForEach(Array(exercise.sets.enumerated()), id: \.element.id) { index, set in
+                        ReadOnlySetRow(setNumber: index + 1, set: set)
+                    }
+                }
+
+                if exercise.notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false {
+                    Text(exercise.notes)
+                        .font(.system(size: 15))
+                        .foregroundStyle(.secondaryText)
+                        .padding(14)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(AppColor.inputBackground)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+            }
+        }
+    }
+
+    private var exerciseTitle: String {
+        let trimmedName = exercise.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmedName.isEmpty ? "Übung" : trimmedName
+    }
+}
+
+private struct ReadOnlySetRow: View {
+    let setNumber: Int
+    let set: SetEntry
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Text("\(setNumber)")
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(AppColor.trainingGreen)
+                .frame(width: 34, alignment: .leading)
+
+            ReadOnlySetValue(text: weightText)
+            ReadOnlySetValue(text: repsText)
+            ReadOnlySetValue(text: volumeText)
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private var weightText: String {
+        guard let weight = set.weight else {
+            return "-"
+        }
+
+        return weight.formatted(.number.precision(.fractionLength(0...2)))
+    }
+
+    private var repsText: String {
+        guard let reps = set.reps else {
+            return "-"
+        }
+
+        return "\(reps)"
+    }
+
+    private var volumeText: String {
+        guard set.volume > 0 else {
+            return "-"
+        }
+
+        return "\(Int(set.volume.rounded()))"
+    }
+}
+
+private struct ReadOnlySetValue: View {
+    let text: String
+
+    var body: some View {
+        Text(text)
+            .font(.system(size: 15, weight: .medium))
+            .foregroundStyle(.primaryText)
+            .lineLimit(1)
+            .minimumScaleFactor(0.78)
+            .frame(maxWidth: .infinity)
+            .frame(height: 38)
+            .background(AppColor.inputBackground)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+}
+
+private struct EmptyReadOnlyExercisesCard: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "list.clipboard")
+                .font(.system(size: 30, weight: .regular))
+                .foregroundStyle(AppColor.trainingGreen)
+
+            Text("Keine Übungen gespeichert")
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(.secondaryText)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 28)
+        .background(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(.cardBackground)
+        )
+    }
+}
+
+private struct WorkoutHistoryTile: View {
+    let workout: Workout
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top) {
+                IconBadge(systemName: "dumbbell.fill")
+                    .scaleEffect(0.78, anchor: .topLeading)
+                    .frame(width: 42, height: 42, alignment: .topLeading)
+
+                Spacer()
+
+                Text(workout.date.formatted(.dateTime.day().month(.abbreviated)))
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.secondaryText)
+                    .lineLimit(1)
+            }
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text(workoutTitle)
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundStyle(.primaryText)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.86)
+
+                Text(exercisePreview)
+                    .font(.system(size: 13))
+                    .foregroundStyle(.secondaryText)
+                    .lineLimit(2)
+            }
+
+            HStack(spacing: 8) {
+                HistoryStatPill(value: "\(workout.exercises.count)", label: "Übungen")
+                HistoryStatPill(value: "\(workout.totalSets)", label: "Sets")
+            }
+
+            HStack(spacing: 6) {
+                Image(systemName: "sum")
+                    .font(.system(size: 12, weight: .semibold))
+
+                Text(volumeText)
+                    .font(.system(size: 13, weight: .semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            .foregroundStyle(AppColor.trainingGreen)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, minHeight: 190, alignment: .topLeading)
+        .background(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(.cardBackground)
+                .shadow(color: .black.opacity(0.06), radius: 14, x: 0, y: 8)
+        )
+        .accessibilityElement(children: .combine)
+    }
+
+    private var workoutTitle: String {
+        let trimmedTitle = workout.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmedTitle.isEmpty ? "Workout" : trimmedTitle
+    }
+
+    private var exercisePreview: String {
+        let names = workout.exercises
+            .map(\.name)
+            .filter { $0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false }
+            .prefix(2)
+
+        guard names.isEmpty == false else {
+            return "Noch keine Übungen"
+        }
+
+        return names.joined(separator: ", ")
+    }
+
+    private var volumeText: String {
+        guard workout.totalVolume > 0 else {
+            return "0 kg Volumen"
+        }
+
+        return "\(Int(workout.totalVolume.rounded())) kg Volumen"
+    }
+}
+
+private struct HistoryStatPill: View {
+    let value: String
+    let label: String
+
+    var body: some View {
+        VStack(spacing: 2) {
+            Text(value)
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(.primaryText)
+
+            Text(label)
+                .font(.system(size: 10, weight: .medium))
+                .foregroundStyle(.secondaryText)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 44)
+        .background(AppColor.inputBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+}
+
+private struct EmptyWorkoutHistoryCard: View {
+    let filter: WorkoutHistoryFilter
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Image(systemName: "calendar.badge.clock")
+                .font(.system(size: 28, weight: .regular))
+                .foregroundStyle(AppColor.trainingGreen)
+
+            Text("Noch keine gespeicherten Workouts")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(.primaryText)
+
+            Text(emptyText)
+                .font(.system(size: 15))
+                .foregroundStyle(.secondaryText)
+        }
+        .padding(22)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(.cardBackground)
+        )
+    }
+
+    private var emptyText: String {
+        switch filter {
+        case .all:
+            return "Sobald du ein Workout speicherst, erscheint es hier."
+        case .year:
+            return "Für dieses Jahr gibt es noch keine gespeicherten Workouts."
+        case .month:
+            return "Für diesen Monat gibt es noch keine gespeicherten Workouts."
+        case .week:
+            return "Für diese Woche gibt es noch keine gespeicherten Workouts."
+        }
+    }
+}
+
+private extension WorkoutHistoryFilter {
+    func contains(_ date: Date, calendar: Calendar = .current) -> Bool {
+        let now = Date()
+
+        switch self {
+        case .all:
+            return true
+        case .year:
+            return calendar.isDate(date, equalTo: now, toGranularity: .year)
+        case .month:
+            return calendar.isDate(date, equalTo: now, toGranularity: .month)
+        case .week:
+            return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
+        }
     }
 }
 
