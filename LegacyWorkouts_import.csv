@@ -1,0 +1,717 @@
+date,exercise_name,top_weight_kg,top_reps,notes
+2022-05-31,Beinstrecker,30,10,
+2022-05-31,Kniebeuge,90,4,
+2022-05-31,Kniebeuge,100,2,
+2022-05-31,Wadenpresse,50,8,
+2022-05-31,Beinpresse,200,6,
+2022-05-31,Beinbeuger,80,10,Fehlende Gewicht/Reps aus erstem späterem vollständigem Beinbeuger-Eintrag vom 2022-06-13 übernommen
+2022-06-06,Bankdrücken,80,5,
+2022-06-06,Schrägbankdrücken,50,10,
+2022-06-06,Preacher Curls,15,10,
+2022-06-06,Schrägbank Kurzhantel,18,10,
+2022-06-06,Schulterdrücken,14,10,
+2022-06-06,Bizepsmaschine,30,8,
+2022-06-09,Bankdrücken,80,5,Aus vorherigem vollständigem Workout vom 2022-06-06 übernommen
+2022-06-09,Schrägbankdrücken,50,10,Aus vorherigem vollständigem Workout vom 2022-06-06 übernommen
+2022-06-09,Preacher Curls,15,10,Aus vorherigem vollständigem Workout vom 2022-06-06 übernommen
+2022-06-09,Schrägbank Kurzhantel,18,10,Aus vorherigem vollständigem Workout vom 2022-06-06 übernommen
+2022-06-09,Schulterdrücken,14,10,Aus vorherigem vollständigem Workout vom 2022-06-06 übernommen
+2022-06-09,Bizepsmaschine,30,8,Aus vorherigem vollständigem Workout vom 2022-06-06 übernommen
+2022-06-09,Brustpresse,70,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2022-06-13,Kniebeuge,70,10,
+2022-06-13,Beinbeuger,80,10,
+2022-06-13,Beinstrecker,72.5,10,
+2022-06-13,Beinpresse,92.5,6,Fehlende Reps aus letztem vollständigem Beinpresse-Eintrag vom 2022-05-31 übernommen
+2022-06-17,Bankdrücken,70,6,
+2022-06-17,Schrägbankdrücken,50,8,
+2022-06-17,Preacher Curls,15,10,
+2022-06-19,Bankdrücken,80,5,Aus vorherigem vollständigem Workout vom 2022-06-09 übernommen
+2022-06-19,Schrägbankdrücken,50,10,Aus vorherigem vollständigem Workout vom 2022-06-09 übernommen
+2022-06-19,Preacher Curls,15,10,Aus vorherigem vollständigem Workout vom 2022-06-09 übernommen
+2022-06-19,Schrägbank Kurzhantel,18,10,Aus vorherigem vollständigem Workout vom 2022-06-09 übernommen
+2022-06-19,Schulterdrücken,14,10,Aus vorherigem vollständigem Workout vom 2022-06-09 übernommen
+2022-06-19,Bizepsmaschine,30,8,Aus vorherigem vollständigem Workout vom 2022-06-09 übernommen
+2022-06-19,Brustpresse,70,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Aus vorherigem vollständigem Workout vom 2022-06-09 übernommen
+2022-06-19,Latzug Kabel,67,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2022-06-19,Vorgebeugtes Rudern,50,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2022-06-19,Rückenstrecker,12,14,körper; Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht aus erstem späterem vollständigem Rückenstrecker-Eintrag vom 2023-04-11 übernommen
+2022-06-19,Dips,86,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus erstem späterem vollständigem Dips-Eintrag vom 2022-06-23 übernommen
+2022-06-21,Bankdrücken,80,4,
+2022-06-21,Schrägbankdrücken,50,10,
+2022-06-21,Preacher Curls,20,8,
+2022-06-21,Bizepsmaschine,30,8,
+2022-06-21,Schulterdrücken,14,10,
+2022-06-21,Butterfly,13.25,8,
+2022-06-22,Kniebeuge,80,8,
+2022-06-22,Beinstrecker,72.5,10,
+2022-06-22,Beinbeuger,85,8,
+2022-06-22,Wadenpresse,45,12,
+2022-06-23,Kabelrudern,57,10,
+2022-06-23,Latzug Kabel,57,12,
+2022-06-23,Dips,86,12,eigen+kette; Fehlende Gewicht aus erstem späterem vollständigem Dips-Eintrag vom 2022-09-07 übernommen
+2022-06-23,Vorgebeugtes Rudern,50,12,
+2022-06-23,Trizeps Dips Kabelzug,24.5,12,
+2022-06-23,Seitheben,8,12,
+2022-06-26,Bankdrücken,70,10,
+2022-06-26,Schrägbankdrücken,50,10,
+2022-06-26,Preacher Curls,15,10,
+2022-06-26,Bizepsmaschine,25,10,
+2022-06-26,Schulterdrücken,12,12,
+2022-06-26,Schrägbank Kurzhantel,18,12,
+2022-06-26,Brustpresse,70,12,
+2022-06-27,Kniebeuge,80,8,
+2022-06-27,Wadenpresse,45,12,
+2022-06-27,Beinpresse,225,8,
+2022-06-27,Beinstrecker,72.5,10,Fehlende Gewicht/Reps aus letztem vollständigem Beinstrecker-Eintrag vom 2022-06-22 übernommen
+2022-06-27,Beinbeuger,85,8,Fehlende Gewicht/Reps aus letztem vollständigem Beinbeuger-Eintrag vom 2022-06-22 übernommen
+2022-06-28,Bankdrücken,70,10,Aus vorherigem vollständigem Workout vom 2022-06-26 übernommen
+2022-06-28,Schrägbankdrücken,50,10,Aus vorherigem vollständigem Workout vom 2022-06-26 übernommen
+2022-06-28,Preacher Curls,15,10,Aus vorherigem vollständigem Workout vom 2022-06-26 übernommen
+2022-06-28,Bizepsmaschine,25,10,Aus vorherigem vollständigem Workout vom 2022-06-26 übernommen
+2022-06-28,Schulterdrücken,12,12,Aus vorherigem vollständigem Workout vom 2022-06-26 übernommen
+2022-06-28,Schrägbank Kurzhantel,18,12,Aus vorherigem vollständigem Workout vom 2022-06-26 übernommen
+2022-06-28,Brustpresse,70,12,Aus vorherigem vollständigem Workout vom 2022-06-26 übernommen
+2022-07-01,Bankdrücken,70,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2022-07-01,Schrägbankdrücken,50,8,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2022-07-01,Preacher Curls,15,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Preacher Curls-Eintrag vom 2022-06-28 übernommen
+2022-07-01,Bizepsmaschine,25,10,Aus vorherigem vollständigem Workout vom 2022-06-28 übernommen
+2022-07-01,Schulterdrücken,12,12,Aus vorherigem vollständigem Workout vom 2022-06-28 übernommen
+2022-07-01,Schrägbank Kurzhantel,18,12,Aus vorherigem vollständigem Workout vom 2022-06-28 übernommen
+2022-07-01,Brustpresse,70,12,Aus vorherigem vollständigem Workout vom 2022-06-28 übernommen
+2022-07-03,Kniebeuge,50,15,
+2022-07-03,Beinpresse,200,8,
+2022-07-03,Wadenpresse,45,12,
+2022-07-03,Beinbeuger,87.5,10,
+2022-07-03,Beinstrecker,80,12,
+2022-07-03,Bauchmaschine,12,15,
+2022-07-04,Kniebeuge,50,15,Aus vorherigem vollständigem Workout vom 2022-07-03 übernommen
+2022-07-04,Beinpresse,200,8,Aus vorherigem vollständigem Workout vom 2022-07-03 übernommen
+2022-07-04,Wadenpresse,45,12,Aus vorherigem vollständigem Workout vom 2022-07-03 übernommen
+2022-07-04,Beinbeuger,87.5,10,Aus vorherigem vollständigem Workout vom 2022-07-03 übernommen
+2022-07-04,Beinstrecker,80,12,Aus vorherigem vollständigem Workout vom 2022-07-03 übernommen
+2022-07-04,Bauchmaschine,12,15,Aus vorherigem vollständigem Workout vom 2022-07-03 übernommen
+2022-07-06,Bankdrücken,70,10,
+2022-07-06,Schrägbankdrücken,50,8,
+2022-07-06,Bizepscurls,15,12,
+2022-07-06,Trizeps Dips Kabelzug,21,15,
+2022-07-06,Schulterdrücken,14,12,
+2022-07-06,Schrägbank Kurzhantel,12,20,
+2022-07-06,Butterfly,12,20,
+2022-07-06,Brustpresse,70,10,
+2022-07-09,Bankdrücken,70,10,Aus vorherigem vollständigem Workout vom 2022-07-06 übernommen
+2022-07-09,Schrägbankdrücken,50,8,Aus vorherigem vollständigem Workout vom 2022-07-06 übernommen
+2022-07-09,Bizepscurls,15,12,Aus vorherigem vollständigem Workout vom 2022-07-06 übernommen
+2022-07-09,Trizeps Dips Kabelzug,21,15,Aus vorherigem vollständigem Workout vom 2022-07-06 übernommen
+2022-07-09,Schulterdrücken,14,12,Aus vorherigem vollständigem Workout vom 2022-07-06 übernommen
+2022-07-09,Schrägbank Kurzhantel,12,20,Aus vorherigem vollständigem Workout vom 2022-07-06 übernommen
+2022-07-09,Butterfly,12,20,Aus vorherigem vollständigem Workout vom 2022-07-06 übernommen
+2022-07-09,Brustpresse,70,10,Aus vorherigem vollständigem Workout vom 2022-07-06 übernommen
+2022-07-09,Latzug Kabel,57,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2022-06-23 übernommen
+2022-07-11,Bankdrücken,70,10,Aus vorherigem vollständigem Workout vom 2022-07-09 übernommen
+2022-07-11,Schrägbankdrücken,50,8,Aus vorherigem vollständigem Workout vom 2022-07-09 übernommen
+2022-07-11,Bizepscurls,15,12,Aus vorherigem vollständigem Workout vom 2022-07-09 übernommen
+2022-07-11,Trizeps Dips Kabelzug,21,15,Aus vorherigem vollständigem Workout vom 2022-07-09 übernommen
+2022-07-11,Schulterdrücken,14,12,Aus vorherigem vollständigem Workout vom 2022-07-09 übernommen
+2022-07-11,Schrägbank Kurzhantel,12,20,Aus vorherigem vollständigem Workout vom 2022-07-09 übernommen
+2022-07-11,Butterfly,12,20,Aus vorherigem vollständigem Workout vom 2022-07-09 übernommen
+2022-07-11,Brustpresse,70,10,Aus vorherigem vollständigem Workout vom 2022-07-09 übernommen
+2022-07-11,Latzug Kabel,57,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Aus vorherigem vollständigem Workout vom 2022-07-09 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2022-07-09 übernommen
+2022-07-11,Kniebeuge,50,15,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Kniebeuge-Eintrag vom 2022-07-04 übernommen
+2022-07-12,Brustpresse,80,12,
+2022-07-12,Bankdrücken,80,3,
+2022-07-12,Hammer Curls,12,12,
+2022-07-12,Schrägbankdrücken,15,10,
+2022-07-12,Schulterdrücken,12,15,
+2022-07-12,Butterfly,12,20,Fehlende Gewicht/Reps aus letztem vollständigem Butterfly-Eintrag vom 2022-07-11 übernommen
+2022-09-02,Brustpresse,80,12,Aus vorherigem vollständigem Workout vom 2022-07-12 übernommen
+2022-09-02,Bankdrücken,65,8,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2022-09-02,Hammer Curls,12,12,Aus vorherigem vollständigem Workout vom 2022-07-12 übernommen
+2022-09-02,Schrägbankdrücken,15,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Schrägbankdrücken-Eintrag vom 2022-07-12 übernommen
+2022-09-02,Schulterdrücken,12,15,Aus vorherigem vollständigem Workout vom 2022-07-12 übernommen
+2022-09-02,Butterfly,12,20,Aus vorherigem vollständigem Workout vom 2022-07-12 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Butterfly-Eintrag vom 2022-07-12 übernommen
+2022-09-07,Brustpresse,80,12,Aus vorherigem vollständigem Workout vom 2022-09-02 übernommen
+2022-09-07,Bankdrücken,65,8,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Aus vorherigem vollständigem Workout vom 2022-09-02 übernommen
+2022-09-07,Hammer Curls,12,12,Aus vorherigem vollständigem Workout vom 2022-09-02 übernommen
+2022-09-07,Schrägbankdrücken,15,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Aus vorherigem vollständigem Workout vom 2022-09-02 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Schrägbankdrücken-Eintrag vom 2022-09-02 übernommen
+2022-09-07,Schulterdrücken,12,15,Aus vorherigem vollständigem Workout vom 2022-09-02 übernommen
+2022-09-07,Butterfly,12,20,Aus vorherigem vollständigem Workout vom 2022-09-02 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Butterfly-Eintrag vom 2022-09-02 übernommen
+2022-09-07,Latzug Kabel,57,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2022-09-07,Langhantel Rudern,60,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2022-09-07,Dips,86,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus erstem späterem vollständigem Dips-Eintrag vom 2022-10-07 übernommen
+2022-10-07,Brustpresse,80,12,Aus vorherigem vollständigem Workout vom 2022-09-07 übernommen
+2022-10-07,Bankdrücken,60,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2022-10-07,Hammer Curls,12,12,Aus vorherigem vollständigem Workout vom 2022-09-07 übernommen
+2022-10-07,Schrägbankdrücken,15,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Aus vorherigem vollständigem Workout vom 2022-09-07 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Schrägbankdrücken-Eintrag vom 2022-09-07 übernommen
+2022-10-07,Schulterdrücken,12,15,Aus vorherigem vollständigem Workout vom 2022-09-07 übernommen
+2022-10-07,Butterfly,12,20,Aus vorherigem vollständigem Workout vom 2022-09-07 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Butterfly-Eintrag vom 2022-09-07 übernommen
+2022-10-07,Latzug Kabel,57,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Aus vorherigem vollständigem Workout vom 2022-09-07 übernommen
+2022-10-07,Langhantel Rudern,60,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Aus vorherigem vollständigem Workout vom 2022-09-07 übernommen
+2022-10-07,Dips,86,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Aus vorherigem vollständigem Workout vom 2022-09-07 übernommen; Fehlende Gewicht/Reps aus erstem späterem vollständigem Dips-Eintrag vom 2025-08-05 übernommen
+2023-04-11,Bankdrücken,50,10,
+2023-04-11,Latzug Kabel,57,12,Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2022-10-07 übernommen
+2023-04-11,Latzug Kabel,45,12,
+2023-04-11,Schrägbank Kurzhantel,12.5,12,
+2023-04-11,Bankdrücken,50,10,
+2023-04-11,Vorgebeugtes Rudern,50,12,
+2023-04-11,Schulterdrücken Kurzhantel,7.5,12,
+2023-04-11,Rückenstrecker,12,15,eigen; Fehlende Reps aus erstem späterem vollständigem Rückenstrecker-Eintrag vom 2023-05-08 übernommen
+2023-04-11,Beinstrecker,45,12,
+2023-04-11,Trizeps Dips Kabelzug,35,15,Fehlende Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2022-07-11 übernommen
+2023-05-08,Bankdrücken,50,10,Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen
+2023-05-08,Latzug Kabel,45,12,Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2023-04-11 übernommen
+2023-05-08,Latzug Kabel,45,12,Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen
+2023-05-08,Schrägbank Kurzhantel,12.5,12,Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen
+2023-05-08,Bankdrücken,50,10,Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen
+2023-05-08,Vorgebeugtes Rudern,50,12,Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen
+2023-05-08,Schulterdrücken Kurzhantel,7.5,12,Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen
+2023-05-08,Rückenstrecker,12,15,eigen; Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen; Fehlende Reps aus erstem späterem vollständigem Rückenstrecker-Eintrag vom 2023-05-15 übernommen
+2023-05-08,Beinstrecker,45,12,Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen
+2023-05-08,Trizeps Dips Kabelzug,35,15,Aus vorherigem vollständigem Workout vom 2023-04-11 übernommen; Fehlende Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2023-04-11 übernommen
+2023-05-08,Kniebeuge,50,20,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht aus letztem vollständigem Kniebeuge-Eintrag vom 2022-07-11 übernommen
+2023-05-15,Bankdrücken,50,10,Aus vorherigem vollständigem Workout vom 2023-05-08 übernommen
+2023-05-15,Latzug Kabel,45,12,Aus vorherigem vollständigem Workout vom 2023-05-08 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2023-05-08 übernommen
+2023-05-15,Latzug Kabel,45,12,Aus vorherigem vollständigem Workout vom 2023-05-08 übernommen
+2023-05-15,Schrägbank Kurzhantel,12.5,12,Aus vorherigem vollständigem Workout vom 2023-05-08 übernommen
+2023-05-15,Bankdrücken,50,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Bankdrücken-Eintrag vom 2023-05-15 übernommen
+2023-05-15,Vorgebeugtes Rudern,50,12,Aus vorherigem vollständigem Workout vom 2023-05-08 übernommen
+2023-05-15,Schulterdrücken Kurzhantel,7.5,12,Aus vorherigem vollständigem Workout vom 2023-05-08 übernommen
+2023-05-15,Rückenstrecker,12,15,eigen; Aus vorherigem vollständigem Workout vom 2023-05-08 übernommen; Fehlende Reps aus erstem späterem vollständigem Rückenstrecker-Eintrag vom 2023-07-11 übernommen
+2023-05-15,Beinstrecker,45,12,Aus vorherigem vollständigem Workout vom 2023-05-08 übernommen
+2023-05-15,Trizeps Dips Kabelzug,35,15,Aus vorherigem vollständigem Workout vom 2023-05-08 übernommen; Fehlende Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2023-05-08 übernommen
+2023-05-15,Kniebeuge,50,20,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Kniebeuge-Eintrag vom 2023-05-08 übernommen
+2023-05-30,Bankdrücken,60,10,Datum korrigiert von 30.05.3023 zu 30.05.2023
+2023-05-30,Beinbeuger,87.5,10,Fehlende Gewicht/Reps aus letztem vollständigem Beinbeuger-Eintrag vom 2022-07-04 übernommen
+2023-05-30,Bankdrücken,60,10,Fehlende Gewicht/Reps aus letztem vollständigem Bankdrücken-Eintrag vom 2023-05-30 übernommen
+2023-05-30,Latzug Kabel,45,12,Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2023-05-15 übernommen
+2023-05-30,Kniebeuge,50,20,Fehlende Gewicht/Reps aus letztem vollständigem Kniebeuge-Eintrag vom 2023-05-15 übernommen
+2023-05-30,Kurzhantel Bankdrücken,20,12,
+2023-05-30,Schulterdrücken Kurzhantel,12.5,12,
+2023-05-30,Bizeps SZ,15,12,
+2023-05-30,Bankdrücken,60,10,Fehlende Gewicht/Reps aus letztem vollständigem Bankdrücken-Eintrag vom 2023-05-30 übernommen
+2023-05-30,Latzug Kabel,45,12,Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2023-05-30 übernommen
+2023-08-05,Schrägbank Kurzhantel,17.5,12,
+2023-08-05,Bankdrücken,60,12,
+2023-08-05,Bizeps SZ,15,12,
+2023-08-05,Schulterdrücken,15,8,
+2023-08-05,Hammer Curls,40,12,
+2023-08-05,Butterfly,60,10,
+2023-08-07,Latzug Kabel,60,10,
+2023-08-07,Kniebeuge,70,8,
+2023-08-07,Trizeps Dips Kabelzug,20,12,
+2023-08-07,Reverse Butterfly,40,12,
+2023-08-07,Seitheben,6,12,
+2023-08-07,Kabelrudern,65,8,
+2023-08-09,Latzug Kabel,60,10,Aus vorherigem vollständigem Workout vom 2023-08-07 übernommen
+2023-08-09,Kniebeuge,70,8,Aus vorherigem vollständigem Workout vom 2023-08-07 übernommen
+2023-08-09,Trizeps Dips Kabelzug,20,12,Aus vorherigem vollständigem Workout vom 2023-08-07 übernommen
+2023-08-09,Reverse Butterfly,40,12,Aus vorherigem vollständigem Workout vom 2023-08-07 übernommen
+2023-08-09,Seitheben,6,12,Aus vorherigem vollständigem Workout vom 2023-08-07 übernommen
+2023-08-09,Kabelrudern,65,8,Aus vorherigem vollständigem Workout vom 2023-08-07 übernommen
+2023-08-09,Bankdrücken,70,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2023-07-11,Kniebeuge,70,10,
+2023-07-11,Latzug Kabel,55,10,
+2023-07-11,Trizepsdrücken Überkopf,30,12,
+2023-07-11,Seitheben,7,12,
+2023-07-11,Rückenstrecker,85,15,eigen; Fehlende Gewicht aus erstem späterem vollständigem Rückenstrecker-Eintrag vom 2025-06-02 übernommen
+2023-07-11,Bauchmaschine,12,15,kombiniert; Fehlende Gewicht/Reps aus letztem vollständigem Bauchmaschine-Eintrag vom 2022-07-04 übernommen
+2023-08-12,Bankdrücken,60,12,Datum korrigiert von 12.08.2024 zu 12.08.2023
+2023-08-12,Schrägbank Kurzhantel,17.5,12,
+2023-08-12,Bizeps SZ,12,15,
+2023-08-12,Schulterdrücken,12.5,12,
+2023-08-12,Bizepscurls,6,8,
+2023-08-12,Butterfly,80,12,
+2023-08-15,Bankdrücken,60,12,Aus vorherigem vollständigem Workout vom 2023-08-12 übernommen
+2023-08-15,Schrägbank Kurzhantel,17.5,12,Aus vorherigem vollständigem Workout vom 2023-08-12 übernommen
+2023-08-15,Bizeps SZ,12,15,Aus vorherigem vollständigem Workout vom 2023-08-12 übernommen
+2023-08-15,Schulterdrücken,12.5,12,Aus vorherigem vollständigem Workout vom 2023-08-12 übernommen
+2023-08-15,Bizepscurls,6,8,Aus vorherigem vollständigem Workout vom 2023-08-12 übernommen
+2023-08-15,Butterfly,80,12,Aus vorherigem vollständigem Workout vom 2023-08-12 übernommen
+2023-08-15,Latzug Kabel,55,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht aus letztem vollständigem Latzug Kabel-Eintrag vom 2023-07-11 übernommen
+2023-10-04,Bankdrücken,60,10,
+2023-10-04,Latzug Kabel,60,10,
+2023-10-04,Kniebeuge,70,10,
+2023-10-04,Schrägbank Kurzhantel,20,10,
+2023-10-04,Kabelrudern,65,8,
+2023-10-04,Trizeps Dips Kabelzug,30,12,
+2023-10-04,Bankdrücken,70,6,
+2023-10-04,Latzug Kabel,60,12,
+2023-10-04,Kniebeuge,70,8,
+2023-10-04,Schrägbank Kurzhantel,20,12,
+2023-10-04,Trizeps Dips Kabelzug,25,10,
+2023-10-04,Butterfly,60,8,
+2023-10-16,Latzug Kabel,60,8,
+2023-10-16,Bankdrücken,60,10,
+2023-10-16,Kabelrudern,55,10,
+2023-10-19,Bankdrücken,70,7,
+2023-10-19,Latzug Kabel,65,10,
+2023-10-19,Schrägbank Kurzhantel,20,12,
+2023-10-19,Kniebeuge,70,8,Fehlende Gewicht/Reps aus letztem vollständigem Kniebeuge-Eintrag vom 2023-10-04 übernommen
+2023-10-19,Trizeps Dips Kabelzug,25,10,Fehlende Gewicht/Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2023-10-04 übernommen
+2023-10-19,Bizeps SZ,17.5,12,
+2023-10-19,Latzug Kabel,60,10,
+2023-10-19,Trizeps Dips Kabelzug,25,12,
+2023-10-19,Kniebeuge,80,5,
+2023-10-19,Seitheben Vorgebeugt,10,10,
+2023-10-19,Kabelrudern,65,12,
+2023-10-19,Bankdrücken,60,10,
+2023-10-19,Schrägbank Kurzhantel,20,12,Fehlende Reps aus letztem vollständigem Schrägbank Kurzhantel-Eintrag vom 2023-10-19 übernommen
+2023-10-19,Latzug Kabel,60,10,Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2023-10-19 übernommen
+2023-10-19,Schrägbank Kurzhantel,20,12,Fehlende Gewicht/Reps aus letztem vollständigem Schrägbank Kurzhantel-Eintrag vom 2023-10-19 übernommen
+2023-10-19,Butterfly,60,8,Fehlende Gewicht/Reps aus letztem vollständigem Butterfly-Eintrag vom 2023-10-04 übernommen
+2023-10-19,Kniebeuge,80,5,Fehlende Gewicht/Reps aus letztem vollständigem Kniebeuge-Eintrag vom 2023-10-19 übernommen
+2023-10-19,Trizeps Dips Kabelzug,25,12,Fehlende Gewicht/Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2023-10-19 übernommen
+2023-10-19,Bankdrücken,60,10,Fehlende Gewicht/Reps aus letztem vollständigem Bankdrücken-Eintrag vom 2023-10-19 übernommen
+2023-10-19,Bizepscurls,6,8,Fehlende Gewicht/Reps aus letztem vollständigem Bizepscurls-Eintrag vom 2023-08-15 übernommen
+2023-11-27,Latzug Kabel,60,12,
+2023-11-27,Schrägbank Kurzhantel,17.5,10,
+2023-11-27,Bankdrücken,60,8,
+2023-11-27,Kniebeuge,80,5,Fehlende Gewicht/Reps aus letztem vollständigem Kniebeuge-Eintrag vom 2023-10-19 übernommen
+2023-11-29,Latzug Kabel,55,12,
+2023-11-29,Bankdrücken,60,12,
+2023-11-29,Langhantel Rudern,60,12,
+2023-11-29,Brustpresse,60,8,
+2023-12-09,Bankdrücken,70,6,
+2023-12-09,Latzug Kabel,60,10,
+2023-12-09,Kniebeuge,70,10,
+2023-12-09,Butterfly,60,6,
+2023-12-12,Bankdrücken,70,8,
+2023-12-12,Schrägbank Kurzhantel,20,10,
+2023-12-12,Bizeps SZ,15,10,
+2023-12-12,Seitheben,40,12,
+2023-12-16,Latzug Kabel,60,10,
+2023-12-16,Reverse Butterfly,35,8,
+2023-12-16,Kniebeuge,70,10,
+2023-12-16,Seitheben Vorgebeugt,8,12,
+2024-01-11,Bankdrücken,60,12,
+2024-01-11,Kabelrudern,60,12,
+2024-01-11,Latzug Kabel,55,8,
+2024-01-15,Bankdrücken,70,4,
+2024-01-15,Schrägbank Kurzhantel,17.5,10,
+2024-01-15,Latzug Kabel,60,8,
+2024-01-15,Trizeps Dips Kabelzug,20,14,
+2024-01-15,Kabelrudern,65,8,
+2024-01-24,Bankdrücken,80,3,
+2024-01-24,Kabelrudern,65,10,
+2024-01-24,Latzug Kabel,60,10,
+2024-01-24,Schrägbank Kurzhantel,20,9,
+2024-01-24,Butterfly,36,10,
+2024-01-24,Trizeps Dips Kabelzug,20,15,
+2024-01-24,Bauchmaschine,12,15,Fehlende Gewicht/Reps aus letztem vollständigem Bauchmaschine-Eintrag vom 2023-07-11 übernommen
+2024-01-24,Bankdrücken,70,8,
+2024-01-24,Schrägbankdrücken,50,6,
+2024-01-24,Latzug Kabel,60,10,
+2024-01-24,Reverse Butterfly,35,8,Fehlende Gewicht/Reps aus letztem vollständigem Reverse Butterfly-Eintrag vom 2023-12-16 übernommen
+2024-01-24,Hammer Curls,40,12,Fehlende Gewicht/Reps aus letztem vollständigem Hammer Curls-Eintrag vom 2023-08-05 übernommen
+2024-01-24,Bankdrücken,70,8,
+2024-01-24,Latzug Kabel,60,8,
+2024-01-24,Trizeps Dips Kabelzug,17.5,14,
+2024-01-24,Bizeps SZ,12.5,10,
+2024-01-24,Butterfly,55,10,
+2024-01-24,Bankdrücken,70,9,
+2024-01-24,Klimmzüge,80,5,Körpergewicht geschätzt mit 80 kg
+2024-01-24,Schulterdrücken Langhantel,30,6,
+2024-01-24,Beinstrecker,110,12,
+2024-01-24,Bankdrücken,50,12,
+2024-01-24,Klimmzüge,80,5,eigen; Körpergewicht geschätzt mit 80 kg
+2024-01-24,Trizeps Dips Kabelzug,17.5,10,
+2024-04-30,Schrägbank Maschine,50,12,
+2024-04-30,Latzug Kabel,60,8,
+2024-04-30,Kabelrudern,60,10,
+2024-04-30,Schulterdrücken Langhantel,30,7,
+2024-04-30,Butterfly,45,10,
+2024-04-30,Trizeps Dips Kabelzug,17.5,15,
+2024-05-02,Bankdrücken,60,12,
+2024-05-02,Latzug Kabel,60,7,
+2024-05-02,Trizeps Dips Kabelzug,20,10,
+2024-05-02,Kabelrudern,60,10,Fehlende Gewicht/Reps aus letztem vollständigem Kabelrudern-Eintrag vom 2024-04-30 übernommen
+2024-05-02,Butterfly,45,10,Fehlende Gewicht/Reps aus letztem vollständigem Butterfly-Eintrag vom 2024-04-30 übernommen
+2024-05-02,Schulterdrücken,12.5,12,Fehlende Gewicht/Reps aus letztem vollständigem Schulterdrücken-Eintrag vom 2023-08-15 übernommen
+2024-05-06,Latzug Kabel,60,10,
+2024-05-06,Bankdrücken,65,6,
+2024-05-06,Schulterdrücken,15,8,
+2024-05-06,Kabelrudern,65,8,
+2024-05-08,Bankdrücken,65,6,
+2024-05-08,Klimmzüge,80,8,eigen; Körpergewicht geschätzt mit 80 kg
+2024-05-08,Trizeps Dips Kabelzug,20,12,
+2024-05-08,Seitheben,40,10,
+2024-05-08,Reverse Butterfly,35,10,Fehlende Gewicht aus letztem vollständigem Reverse Butterfly-Eintrag vom 2024-01-24 übernommen
+2024-05-29,Bankdrücken,70,4,
+2024-05-29,Latzug Kabel,60,10,
+2024-05-29,Trizeps Dips Kabelzug,22.5,10,
+2024-05-29,Schrägbankdrücken,40,10,
+2024-05-29,Schulterdrücken Kurzhantel,10,8,
+2024-05-29,Kabelrudern,65,8,
+2025-05-28,Bankdrücken,65,6,
+2025-05-28,Latzug Kabel,55,8,
+2025-05-28,Trizeps Dips Kabelzug,15,15,
+2025-05-28,Bauchmaschine,65,12,
+2025-05-28,Kabelrudern,60,10,
+2025-06-02,Latzug Kabel,55,8,
+2025-06-02,Bankdrücken,60,10,
+2025-06-02,Reverse Butterfly,45,10,
+2025-06-02,Kniebeuge,60,11,
+2025-06-02,Trizeps Dips Kabelzug,20,8,
+2025-06-02,Rotatoren,1.25,12,Fehlende Gewicht/Reps aus erstem späterem vollständigem Rotatoren-Eintrag vom 2025-06-04 übernommen
+2025-06-02,Rückenstrecker,85,15,Fehlende Gewicht/Reps aus erstem späterem vollständigem Rückenstrecker-Eintrag vom 2025-06-04 übernommen
+2025-06-04,Bankdrücken,65,6,
+2025-06-04,Latzug Kabel,55,10,
+2025-06-04,Trizeps Dips Kabelzug,20,10,
+2025-06-04,Reverse Butterfly,13,10,
+2025-06-04,Butterfly,13,12,
+2025-06-04,Rückenstrecker,85,15,Fehlende Gewicht/Reps aus erstem späterem vollständigem Rückenstrecker-Eintrag vom 2025-06-06 übernommen
+2025-06-04,Rotatoren,1.25,12,Fehlende Gewicht/Reps aus erstem späterem vollständigem Rotatoren-Eintrag vom 2025-06-06 übernommen
+2025-06-06,Latzug Kabel,60,7,
+2025-06-06,Bankdrücken,60,8,
+2025-06-06,Kabelrudern,55,12,
+2025-06-06,Trizeps Dips Kabelzug,20,12,
+2025-06-06,Bauchmaschine,65,12,
+2025-06-06,Rückenstrecker,85,15,
+2025-06-06,Butterfly,45,12,
+2025-06-06,Bizepscurls,25,12,
+2025-06-06,Rotatoren,1.25,12,
+2025-06-17,Bankdrücken,60,10,
+2025-06-17,Latzug Kabel,55,10,
+2025-06-17,Rückenstrecker,85,12,
+2025-06-17,Trizeps Dips Kabelzug,20,10,
+2025-06-17,Bizeps SZ,15,10,
+2025-06-17,Butterfly,60,10,
+2025-06-17,Rotatoren,1.25,12,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-06-06 übernommen
+2025-07-10,Bankdrücken,60,12,
+2025-07-10,Kabelrudern,55,12,
+2025-07-10,Latzug Kabel,60,8,
+2025-07-10,Rückenstrecker,85,12,Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-06-17 übernommen
+2025-07-10,Trizeps Dips Kabelzug,17.5,12,
+2025-07-10,Bizeps SZ,15,12,
+2025-07-13,Latzug Kabel,60,10,
+2025-07-13,Bankdrücken,65,7,
+2025-07-13,Rückenstrecker,85,12,Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-07-10 übernommen
+2025-07-13,Trizeps Dips Kabelzug,15,12,
+2025-07-13,Langhantel Rudern,60,12,(fast Blackout)
+2025-07-13,Bauchmaschine,70,12,
+2025-07-15,Kabelrudern,65,12,
+2025-07-15,Bankdrücken,65,9,
+2025-07-15,Latzug Kabel,52,10,scheißmaschine
+2025-07-15,Rückenstrecker,85,12,Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-07-13 übernommen
+2025-07-15,Trizeps Dips Kabelzug,15,15,
+2025-07-19,Bankdrücken,70,8,
+2025-07-19,Latzug Kabel,60,10,
+2025-07-19,Rückenstrecker,85,12,Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-07-15 übernommen
+2025-07-19,Trizeps Dips Kabelzug,17.5,12,
+2025-07-19,Bizeps SZ,15,12,
+2025-07-19,Seitheben Vorgebeugt,8.5,10,
+2025-07-21,Bankdrücken,70,8,
+2025-07-21,Kabelrudern,65,10,
+2025-07-21,Latzug Kabel,60,10,
+2025-07-21,Rückenstrecker,85,12,Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-07-19 übernommen
+2025-07-21,Trizeps Dips Kabelzug,15,15,
+2025-07-21,Bizeps SZ,15,12,
+2025-07-21,Seitheben Vorgebeugt,8.5,10,pro Seite
+2025-07-21,Rotatoren,4,10,
+2025-07-24,Latzug Kabel,60,10,
+2025-07-24,Bankdrücken,70,7,
+2025-07-24,Rückenstrecker,85,12,Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-07-21 übernommen
+2025-07-24,Trizeps Dips Kabelzug,17.5,15,
+2025-07-24,Bizeps SZ,20,12,
+2025-07-24,Seitheben Vorgebeugt,8.5,10,
+2025-07-28,Latzug Kabel,65,8,
+2025-07-28,Trizeps Dips Kabelzug,15,15,
+2025-07-28,Kabelrudern,60,10,
+2025-07-28,Vorgebeugtes Rudern,8.5,10,
+2025-08-01,Bankdrücken,70,9,
+2025-08-01,Bizeps SZ,20,12,
+2025-08-01,Bauchmaschine,70,12,Fehlende Gewicht/Reps aus letztem vollständigem Bauchmaschine-Eintrag vom 2025-07-13 übernommen
+2025-08-01,Schrägbank Kurzhantel,17.5,12,hantelgewicht
+2025-08-01,Schulterdrücken Maschine,30,12,
+2025-08-01,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-07-21 übernommen
+2025-08-05,Bankdrücken,70,9,Aus vorherigem vollständigem Workout vom 2025-08-01 übernommen
+2025-08-05,Bizeps SZ,20,12,Aus vorherigem vollständigem Workout vom 2025-08-01 übernommen
+2025-08-05,Bauchmaschine,70,12,Aus vorherigem vollständigem Workout vom 2025-08-01 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Bauchmaschine-Eintrag vom 2025-08-01 übernommen
+2025-08-05,Schrägbank Kurzhantel,17.5,12,hantelgewicht; Aus vorherigem vollständigem Workout vom 2025-08-01 übernommen
+2025-08-05,Schulterdrücken Maschine,30,12,Aus vorherigem vollständigem Workout vom 2025-08-01 übernommen
+2025-08-05,Rotatoren,4,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-08-01 übernommen
+2025-08-05,Latzug Kabel,60,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2025-08-05,Kabelrudern,65,10,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Reps aus letztem vollständigem Kabelrudern-Eintrag vom 2025-07-28 übernommen
+2025-08-05,Rückenstrecker,85,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-07-24 übernommen
+2025-08-05,Dips,86,12,eigen; Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht aus erstem späterem vollständigem Dips-Eintrag vom 2025-08-13 übernommen
+2025-08-05,Seitheben Vorgebeugt,8.5,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2025-08-07,Bankdrücken,70,8,
+2025-08-07,Schrägbank Kurzhantel,11.5,12,pro hantel
+2025-08-07,Bizeps SZ,20,8,ohne Stange
+2025-08-07,Bauchmaschine,70,12,
+2025-08-07,Butterfly,60,12,
+2025-08-07,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-08-05 übernommen
+2025-08-13,Latzug Kabel,60,10,
+2025-08-13,Kabelrudern,60,10,
+2025-08-13,Trizeps Dips Kabelzug,15,15,
+2025-08-13,Dips,86,10,körpergewicht
+2025-08-13,Rückenstrecker,85,12,Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-08-05 übernommen
+2025-08-13,Seitheben Vorgebeugt,10,10,
+2025-08-13,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-08-07 übernommen
+2025-08-15,Latzug Kabel,60,10,Aus vorherigem vollständigem Workout vom 2025-08-13 übernommen
+2025-08-15,Kabelrudern,60,10,Aus vorherigem vollständigem Workout vom 2025-08-13 übernommen
+2025-08-15,Trizeps Dips Kabelzug,15,15,Aus vorherigem vollständigem Workout vom 2025-08-13 übernommen
+2025-08-15,Dips,86,10,körpergewicht; Aus vorherigem vollständigem Workout vom 2025-08-13 übernommen
+2025-08-15,Rückenstrecker,85,12,Aus vorherigem vollständigem Workout vom 2025-08-13 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-08-13 übernommen
+2025-08-15,Seitheben Vorgebeugt,10,10,Aus vorherigem vollständigem Workout vom 2025-08-13 übernommen
+2025-08-15,Rotatoren,4,10,Aus vorherigem vollständigem Workout vom 2025-08-13 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-08-13 übernommen
+2025-08-15,Bankdrücken,60,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2025-08-15,Butterfly,60,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Butterfly-Eintrag vom 2025-08-07 übernommen
+2025-08-19,Latzug Kabel,65,8,
+2025-08-19,Dips,85,10,körper
+2025-08-19,Langhantel Rudern,60,10,
+2025-08-19,Beinbeuger,45,12,
+2025-08-19,Beinstrecker,45,12,
+2025-08-19,Trizeps Dips Kabelzug,15,15,Fehlende Gewicht/Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2025-08-15 übernommen
+2025-08-21,Bankdrücken,60,12,
+2025-08-21,Bizeps SZ,20,8,ohne Stange
+2025-08-21,Bauchmaschine,70,12,
+2025-08-21,Butterfly,60,12,
+2025-08-21,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-08-15 übernommen
+2025-08-24,Latzug Kabel,65,8,
+2025-08-24,Dips,85,10,
+2025-08-24,Langhantel Rudern,60,10,
+2025-08-24,Beinbeuger,45,12,
+2025-08-24,Beinstrecker,45,12,
+2025-08-24,Trizeps Dips Kabelzug,15,15,Fehlende Gewicht/Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2025-08-19 übernommen
+2025-08-26,Bulgarian Squats,60,12,
+2025-08-26,Latzug Kabel,65,10,
+2025-08-26,Schrägbankdrücken,11,12,
+2025-08-26,Kabelrudern,65,12,
+2025-08-26,Dips,85,10,
+2025-08-29,Bankdrücken,50,12,
+2025-08-29,Latzug Kabel,65,10,
+2025-08-29,Dips,85,10,
+2025-08-29,Vorgebeugtes Rudern,10,12,
+2025-08-29,Bizeps SZ,20,10,ohne stange
+2025-08-29,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-08-21 übernommen
+2025-08-29,Beinstrecker,50,12,
+2025-08-29,Bankdrücken,60,12,
+2025-08-29,Latzug Kabel,65,10,3 topsets
+2025-08-29,Dips,85,10,
+2025-08-29,Beinbeuger,40,12,
+2025-08-29,Beinstrecker,47.5,12,
+2025-08-29,Kabelrudern,70,10,
+2025-08-29,Butterfly,45,12,
+2025-08-29,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-08-29 übernommen
+2025-09-08,Latzug Kabel,65,10,
+2025-09-08,Bankdrücken,50,12,
+2025-09-08,Kabelrudern,65,10,
+2025-09-08,Dips,85,12,
+2025-09-08,Vorgebeugtes Rudern,8,12,
+2025-09-08,Schrägbankdrücken,10,12,
+2025-09-08,Butterfly,59,12,
+2025-09-08,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-08-29 übernommen
+2025-09-10,Bankdrücken,50,12,
+2025-09-10,Latzug Kabel,65,12,
+2025-09-10,Trizeps Dips Kabelzug,17.5,12,
+2025-09-10,Reverse Butterfly,13,10,Fehlende Gewicht/Reps aus letztem vollständigem Reverse Butterfly-Eintrag vom 2025-06-04 übernommen
+2025-09-22,Latzug Kabel,59,10,schwergängige maschine
+2025-09-22,Trizeps Dips Kabelzug,15,15,
+2025-09-22,Butterfly,52,12,
+2025-09-22,Bizeps SZ,15,12,ohne stange
+2025-09-22,Vorgebeugtes Rudern,8.5,10,
+2025-09-22,Kabelrudern,60,12,
+2025-09-22,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-09-08 übernommen
+2025-09-24,Latzug Kabel,60,10,
+2025-09-24,Bankdrücken,60,12,"einfach, Schulter knackt leicht"
+2025-09-24,Dips,85,10,
+2025-09-24,Kabelrudern,65,12,
+2025-09-24,Beinstrecker,40,12,
+2025-09-24,Preacher Curls,15,10,ohne stange
+2025-09-24,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-09-22 übernommen
+2025-09-26,Kabelrudern,35,12,
+2025-09-26,Bankdrücken,60,12,
+2025-09-26,Trizeps Dips Kabelzug,15,15,
+2025-09-26,Latzug Kabel,60,10,2 topsets
+2025-09-26,Rückenstrecker,85,12,Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-08-15 übernommen
+2025-10-06,Latzug Kabel,60,10,
+2025-10-06,Bankdrücken,50,12,nur 1 Satz
+2025-10-06,Trizeps Dips Kabelzug,15,15,
+2025-10-06,Bizeps SZ,15,10,
+2025-10-06,Kabelrudern,65,12,
+2025-10-06,Beinstrecker,40,12,Fehlende Gewicht/Reps aus letztem vollständigem Beinstrecker-Eintrag vom 2025-09-24 übernommen
+2025-10-06,Beinbeuger,40,12,Fehlende Gewicht/Reps aus letztem vollständigem Beinbeuger-Eintrag vom 2025-08-29 übernommen
+2025-10-06,Dips,85,10,Fehlende Gewicht/Reps aus letztem vollständigem Dips-Eintrag vom 2025-09-24 übernommen
+2025-10-10,Latzug Kabel,65,8,
+2025-10-10,Trizeps Dips Kabelzug,17.5,12,
+2025-10-10,Bankdrücken,40,10,
+2025-10-10,Kabelrudern,65,12,
+2025-10-10,Butterfly,59,12,
+2025-10-10,Beinstrecker,55,12,
+2025-10-10,Beinbeuger,40,12,
+2025-10-10,Preacher Curls,15,10,
+2025-10-10,Rückenstrecker,85,12,Fehlende Gewicht/Reps aus letztem vollständigem Rückenstrecker-Eintrag vom 2025-09-26 übernommen
+2025-10-13,Latzug Kabel,65,7,
+2025-10-13,Trizeps Dips Kabelzug,15,15,
+2025-10-13,Butterfly,59,12,
+2025-10-13,Rückenstrecker,85,15,
+2025-10-13,Bizeps SZ,15,10,Fehlende Reps aus letztem vollständigem Bizeps SZ-Eintrag vom 2025-10-06 übernommen
+2025-10-13,Seitheben Vorgebeugt,8.5,10,pro seite; Fehlende Reps aus letztem vollständigem Seitheben Vorgebeugt-Eintrag vom 2025-08-15 übernommen
+2025-10-20,Latzug Kabel,60,8,
+2025-10-20,Trizeps Dips Kabelzug,17.5,12,
+2025-10-20,Butterfly,59,12,
+2025-10-20,Rückenstrecker,85,15,
+2025-10-20,Beinbeuger,40,12,
+2025-10-20,Beinstrecker,50,12,
+2025-10-22,Kabelrudern,70,8,
+2025-10-22,Trizeps Dips Kabelzug,17.5,15,
+2025-10-22,Butterfly,59,12,
+2025-10-22,Rückenstrecker,85,15,
+2025-10-22,Dips,85,10,
+2025-10-22,Bizeps SZ,15,10,
+2025-10-22,Seitheben Vorgebeugt,8.5,12,
+2025-10-26,Butterfly,66,12,Datum korrigiert von 26.10.2026 zu 26.10.2025
+2025-10-26,Kabelrudern,75,12,
+2025-10-26,Trizeps Dips Kabelzug,17.5,12,
+2025-10-26,Latzug Kabel,60,8,
+2025-10-26,Preacher Curls,10,12,pro hand
+2025-10-28,Latzug Kabel,60,10,
+2025-10-28,Butterfly,66,10,
+2025-10-28,Trizeps Dips Kabelzug,17.5,15,
+2025-10-28,Rückenstrecker,85,15,
+2025-10-28,Dips,85,10,
+2025-10-28,Bizepsmaschine,40,12,Schätzwert
+2025-10-28,Rotatoren,4,10,Fehlende Gewicht/Reps aus letztem vollständigem Rotatoren-Eintrag vom 2025-09-24 übernommen
+2025-11-02,Butterfly,73,10,
+2025-11-02,Kabelrudern,70,12,
+2025-11-02,Rückenstrecker,85,15,
+2025-11-02,Latzug Kabel,60,10,
+2025-11-02,Bizeps SZ,15,12,
+2025-11-05,Latzug Kabel,65,8,
+2025-11-05,Kabelrudern,70,10,
+2025-11-05,Dips,85,10,heute war's einfacher
+2025-11-05,Hammer Curls,12,10,pro hand
+2025-11-05,Rückenstrecker,85,15,
+2025-11-05,Beinbeuger,40,12,Fehlende Gewicht/Reps aus letztem vollständigem Beinbeuger-Eintrag vom 2025-10-20 übernommen
+2025-11-05,Butterfly,59,12,
+2025-11-07,Kabelrudern,70,12,
+2025-11-07,Latzug Kabel,65,8,letzter satz
+2025-11-07,Trizeps Dips Kabelzug,17.5,15,
+2025-11-07,Bizeps SZ,15,12,
+2025-11-07,Upper Back Maschine,40,12,
+2025-11-10,Latzug Kabel,65,7,
+2025-11-10,Upper Back Maschine,45,12,
+2025-11-10,Trizeps Dips Kabelzug,20,12,
+2025-11-10,Rückenstrecker,85,15,
+2025-11-10,Butterfly,50,12,
+2025-11-10,Bizepscurls,15,12,
+2025-11-15,Latzug Kabel,65,8,
+2025-11-15,Trizeps Dips Kabelzug,20,12,
+2025-11-15,Butterfly,59,12,
+2025-11-15,Reverse Butterfly,50,12,
+2025-11-15,Rückenstrecker,85,18,
+2025-11-15,Preacher Curls,50,10,
+2025-11-26,Latzug Kabel,65,8,
+2025-11-26,Trizeps Dips Kabelzug,20,12,
+2025-11-26,Butterfly,59,12,
+2025-11-26,Reverse Butterfly,50,12,
+2025-11-26,Rückenstrecker,85,18,
+2025-11-26,Preacher Curls,50,10,
+2025-11-30,Latzug Kabel,65,8,
+2025-11-30,Trizeps Dips Kabelzug,20,12,
+2025-11-30,Butterfly,59,12,
+2025-11-30,Reverse Butterfly,50,12,
+2025-11-30,Rückenstrecker,85,18,
+2025-11-30,Preacher Curls,50,10,
+2025-12-06,Reverse Butterfly,44,10,
+2025-12-06,Latzug Kabel,70,6,
+2025-12-06,Trizeps Dips Kabelzug,20,12,
+2025-12-06,Rückenstrecker,85,18,
+2025-12-06,Kabelrudern,70,10,
+2025-12-08,Latzug Kabel,75,7,
+2025-12-08,Trizeps Dips Kabelzug,20,12,
+2025-12-08,Rückenstrecker,85,18,
+2025-12-08,Reverse Butterfly,44,12,
+2025-12-08,Kabelrudern,70,10,
+2025-12-08,Preacher Curls,15,10,
+2025-12-10,Reverse Butterfly,52,12,
+2025-12-10,Latzug Kabel,75,7,
+2025-12-10,Trizeps Dips Kabelzug,17.5,12,
+2025-12-10,Rückenstrecker,85,18,
+2025-12-10,Kabelrudern,70,10,
+2025-12-10,Preacher Curls,15,10,
+2025-12-12,Latzug Kabel,70,8,
+2025-12-12,Reverse Butterfly,59,10,
+2025-12-12,Trizeps Dips Kabelzug,20,12,
+2025-12-12,Kabelrudern,70,12,
+2025-12-12,Beinstrecker,60,12,
+2025-12-12,Beinbeuger,60,12,
+2025-12-12,Bauchmaschine,90,10,
+2025-12-12,Brustpresse,50,10,
+2026-01-13,Butterfly,52,12,
+2026-01-13,Kabelrudern,60,12,
+2026-01-13,Trizeps Dips Kabelzug,17.5,12,
+2026-01-13,Latzug Kabel,59,10,Scheißmaschine
+2026-01-16,Reverse Butterfly,52,10,
+2026-01-16,Brustpresse,55,12,
+2026-01-16,Latzug Kabel,65,8,
+2026-01-16,Trizeps Dips Kabelzug,17.5,12,
+2026-01-16,Bizeps SZ,15,12,
+2026-01-16,Seitheben Vorgebeugt,8.5,12,
+2026-01-18,Latzug Kabel,70,10,
+2026-01-18,Brustpresse,60,12,
+2026-01-18,Trizeps Dips Kabelzug,20,10,
+2026-01-18,Kabelrudern,60,12,Fehlende Gewicht/Reps aus letztem vollständigem Kabelrudern-Eintrag vom 2026-01-13 übernommen
+2026-01-18,Bizepsmaschine,40,12,Fehlende Gewicht/Reps aus letztem vollständigem Bizepsmaschine-Eintrag vom 2025-10-28 übernommen
+2026-01-21,Kniebeuge,40,12,
+2026-01-21,Brustpresse,70,10,
+2026-01-21,Latzug Kabel,65,9,
+2026-01-21,Seitheben Vorgebeugt,8.5,12,Fehlende Gewicht/Reps aus letztem vollständigem Seitheben Vorgebeugt-Eintrag vom 2026-01-16 übernommen
+2026-01-21,Butterfly,52,8,
+2026-01-21,Bauchmaschine,90,10,Fehlende Gewicht/Reps aus letztem vollständigem Bauchmaschine-Eintrag vom 2025-12-12 übernommen
+2026-01-24,Kniebeuge,40,12,
+2026-01-24,Brustpresse,70,10,
+2026-01-24,Latzug Kabel,65,9,
+2026-01-24,Seitheben Vorgebeugt,8.5,12,Fehlende Gewicht/Reps aus letztem vollständigem Seitheben Vorgebeugt-Eintrag vom 2026-01-21 übernommen
+2026-01-24,Butterfly,52,8,
+2026-01-24,Bauchmaschine,90,10,Fehlende Gewicht/Reps aus letztem vollständigem Bauchmaschine-Eintrag vom 2026-01-21 übernommen
+2026-01-30,Brustpresse,75,10,Fehlende Reps aus letztem vollständigem Brustpresse-Eintrag vom 2026-01-24 übernommen
+2026-01-30,Latzug Kabel,75,6,
+2026-01-30,Face Pull,50,10,
+2026-01-30,Trizeps Dips Kabelzug,20,12,
+2026-01-30,Seitheben Vorgebeugt,10,10,
+2026-01-30,Latzug Kabel,75,7,
+2026-01-30,Brustpresse,70,12,
+2026-01-30,Trizeps Dips Kabelzug,20,12,Fehlende Gewicht/Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2026-01-30 übernommen
+2026-01-30,Butterfly,52,8,Fehlende Gewicht/Reps aus letztem vollständigem Butterfly-Eintrag vom 2026-01-24 übernommen
+2026-02-28,Brustpresse,75,12,Aus vorherigem vollständigem Workout vom 2026-01-30 übernommen; Fehlende Reps aus letztem vollständigem Brustpresse-Eintrag vom 2026-01-30 übernommen
+2026-02-28,Latzug Kabel,75,6,Aus vorherigem vollständigem Workout vom 2026-01-30 übernommen
+2026-02-28,Face Pull,50,10,Aus vorherigem vollständigem Workout vom 2026-01-30 übernommen
+2026-02-28,Trizeps Dips Kabelzug,20,12,Aus vorherigem vollständigem Workout vom 2026-01-30 übernommen
+2026-02-28,Seitheben Vorgebeugt,10,10,Aus vorherigem vollständigem Workout vom 2026-01-30 übernommen
+2026-02-28,Latzug Kabel,75,6,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2026-02-28 übernommen
+2026-02-28,Brustpresse,75,12,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt; Fehlende Gewicht/Reps aus letztem vollständigem Brustpresse-Eintrag vom 2026-02-28 übernommen
+2026-02-28,Trizeps Dips Kabelzug,20,12,Aus vorherigem vollständigem Workout vom 2026-01-30 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2026-02-28 übernommen
+2026-02-28,Butterfly,52,8,Aus vorherigem vollständigem Workout vom 2026-01-30 übernommen; Fehlende Gewicht/Reps aus letztem vollständigem Butterfly-Eintrag vom 2026-01-30 übernommen
+2026-03-06,Latzug Kabel,60,10,
+2026-03-06,Brustpresse,55,12,
+2026-03-06,Trizeps Dips Kabelzug,15,15,
+2026-03-06,Beinbeuger,55,12,Fehlende Reps aus letztem vollständigem Beinbeuger-Eintrag vom 2025-12-12 übernommen
+2026-03-06,Beinstrecker,50,12,
+2026-03-06,Seitheben Vorgebeugt,10,10,
+2026-03-10,Latzug Kabel,65,10,
+2026-03-10,Brustpresse,65,12,
+2026-03-10,Seitheben Vorgebeugt,10,10,
+2026-03-13,Latzug Kabel,60,10,Aus vorherigem vollständigem Workout vom 2026-03-06 übernommen
+2026-03-13,Brustpresse,55,12,Aus vorherigem vollständigem Workout vom 2026-03-06 übernommen
+2026-03-13,Trizeps Dips Kabelzug,15,15,Aus vorherigem vollständigem Workout vom 2026-03-06 übernommen
+2026-03-13,Beinbeuger,55,12,Aus vorherigem vollständigem Workout vom 2026-03-06 übernommen; Fehlende Reps aus letztem vollständigem Beinbeuger-Eintrag vom 2026-03-06 übernommen
+2026-03-13,Beinstrecker,50,12,Aus vorherigem vollständigem Workout vom 2026-03-06 übernommen
+2026-03-13,Seitheben Vorgebeugt,10,10,Aus vorherigem vollständigem Workout vom 2026-03-06 übernommen
+2026-03-13,Reverse Butterfly,59,8,Vorhandener Eintrag in unvollständigem Workout; restliche Übungen ergänzt
+2026-03-18,Latzug Kabel,70,6,
+2026-03-18,Brustpresse,70,12,
+2026-03-18,Beinbeuger,55,12,
+2026-03-18,Beinstrecker,55,12,
+2026-03-18,Wadenpresse,45,12,Fehlende Gewicht/Reps aus letztem vollständigem Wadenpresse-Eintrag vom 2022-07-04 übernommen
+2026-03-18,Seitheben Vorgebeugt,9,12,
+2026-03-18,Trizeps Dips Kabelzug,17.5,15,Fehlende Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2026-03-13 übernommen
+2026-05-10,Latzug Kabel,70,6,
+2026-05-10,Brustpresse,70,12,
+2026-05-10,Beinbeuger,55,12,
+2026-05-10,Beinstrecker,55,12,
+2026-05-10,Wadenpresse,45,12,Fehlende Gewicht/Reps aus letztem vollständigem Wadenpresse-Eintrag vom 2026-03-18 übernommen
+2026-05-10,Seitheben Vorgebeugt,9,12,
+2026-05-10,Trizeps Dips Kabelzug,17.5,15,Fehlende Reps aus letztem vollständigem Trizeps Dips Kabelzug-Eintrag vom 2026-03-18 übernommen
+2026-05-10,Bankdrücken,50,12,
+2026-05-10,Latzug Kabel,70,6,Fehlende Gewicht/Reps aus letztem vollständigem Latzug Kabel-Eintrag vom 2026-05-10 übernommen

@@ -59,6 +59,37 @@ Exercise history should let users select an exercise, view previous performances
 
 Analytics should stay simple: maximum weight over time, volume per exercise, total workout volume, sets per exercise or muscle group, and personal records.
 
+## Legacy Data Import Structure
+
+Legacy workout data is sanitized before it is imported into the app. The current source file is the unsorted CSV `Unbenannte Tabelle - Tabellenblatt1.csv`; do not edit that raw file directly. Use `Scripts/sanitize_legacy_csv.py` to regenerate the derived files:
+
+- `LegacyWorkouts_sanitized.csv` - complete sanitized working file and future import source.
+- `LegacyWorkouts_review.csv` - subset of rows that were inferred, filled, corrected, or otherwise worth reviewing.
+
+The sanitized CSV uses this structure:
+
+- `date` - ISO date in `yyyy-mm-dd` format.
+- `exercise_name` - canonical exercise name used for import and progress grouping.
+- `raw_exercise_name` - original exercise label from the source CSV; keep for audit, but skip during app import.
+- `top_weight_kg` - numeric top-set weight in kilograms.
+- `top_reps` - top-set reps as an integer.
+- `notes` - preserved source notes and sanitizing notes.
+- `source_row` - source CSV row number or generated copy marker.
+- `import_status` - semicolon-delimited flags describing whether the row was clean, copied, corrected, estimated, or filled.
+
+For app import, create one `Workout` per `date`, one `WorkoutExercise` per sanitized row, and one `SetEntry` from `top_weight_kg`, `top_reps`, and row notes. Ignore `raw_exercise_name`, `source_row`, and `import_status` in the persisted user-facing workout data unless a debug or review UI explicitly needs them.
+
+Sanitizing rules currently include:
+
+- Dates are inherited by following exercise rows until the next date marker.
+- Date-only or very incomplete workouts are filled from the previous complete workout.
+- If a workout has too few valid exercises, existing entries are preserved and missing exercises are filled from the previous complete workout.
+- Weight/reps column swaps are detected when the likely weight appears before the likely reps.
+- Missing weight or reps are first filled from the previous complete row for the same canonical exercise.
+- Remaining early missing values are filled upward from the first later complete row for the same canonical exercise.
+- Bodyweight entries such as Klimmzüge use estimated bodyweight: 2022 linearly from 73 kg to 80 kg, 2023-2024 as 80 kg, and 2025 onward as 85 kg.
+- Workout notes such as pauses, split changes, warmups, or stretching are retained as notes and not treated as exercises.
+
 ## UX Principles
 
 The app should be minimal, clean, fast, gym-friendly, and usable with one hand. Avoid complex dashboards in the MVP. Prefer simple lists, cards, clear navigation, and fast access to starting or continuing a workout, viewing workout history, and checking progress.
