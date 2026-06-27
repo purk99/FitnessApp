@@ -14,18 +14,25 @@ struct ContentView: View {
     @Query(sort: \Workout.date, order: .reverse) private var workouts: [Workout]
     @AppStorage("customExerciseTemplates") private var customExerciseTemplatesData = "[]"
     @AppStorage("workoutPlanTemplates") private var workoutPlanTemplatesData = ""
+    @AppStorage("stretchingRoutines") private var stretchingRoutinesData = ""
+    @AppStorage("stretchingEntries") private var stretchingEntriesData = "[]"
 
     @State private var selectedTab: AppTab = .home
     @State private var activeWorkout: Workout?
     @State private var saveErrorMessage: String?
+    @State private var homeStretchingSheet: StretchingSheet?
 
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {
                 HomeView(
+                    workouts: workouts,
+                    stretchingEntries: stretchingEntries,
+                    eveningRoutine: eveningRoutine,
                     lastWorkout: workouts.first,
                     startWorkout: startWorkout,
-                    continueWorkout: continueWorkout
+                    continueWorkout: continueWorkout,
+                    openEveningStretching: openEveningStretching
                 )
             }
             .tabItem {
@@ -39,11 +46,15 @@ struct ContentView: View {
                     workouts: workouts,
                     exerciseTemplates: exerciseTemplates,
                     workoutPlans: workoutPlans,
+                    stretchingRoutines: stretchingRoutines,
                     finishWorkout: finishWorkout,
                     cancelWorkout: cancelWorkout,
                     saveExerciseTemplate: saveExerciseTemplate,
                     saveWorkoutPlan: saveWorkoutPlan,
                     deleteWorkoutPlan: deleteWorkoutPlan,
+                    saveStretchingRoutine: saveStretchingRoutine,
+                    deleteStretchingRoutine: deleteStretchingRoutine,
+                    saveStretchingEntry: saveStretchingEntry,
                     continueWorkout: continueWorkout,
                     importWorkouts: importWorkouts,
                     deleteAllWorkouts: deleteAllWorkouts
@@ -57,6 +68,7 @@ struct ContentView: View {
             NavigationStack {
                 AnalyticsView(
                     workouts: workouts,
+                    stretchingEntries: stretchingEntries,
                     continueWorkout: continueWorkout
                 )
             }
@@ -72,6 +84,21 @@ struct ContentView: View {
             }
         } message: {
             Text(saveErrorMessage ?? "Bitte versuche es erneut.")
+        }
+        .sheet(item: $homeStretchingSheet) { sheet in
+            switch sheet {
+            case .edit(let routine):
+                StretchingRoutineEditorView(
+                    routine: routine,
+                    saveRoutine: saveStretchingRoutine,
+                    deleteRoutine: deleteStretchingRoutine
+                )
+            case .log(let routine):
+                StretchingSessionView(
+                    routine: routine,
+                    saveEntry: saveStretchingEntry
+                )
+            }
         }
     }
 
@@ -112,9 +139,48 @@ struct ContentView: View {
         return plans
     }
 
+    private var stretchingRoutines: [StretchingRoutine] {
+        guard stretchingRoutinesData.isEmpty == false else {
+            return StretchingRoutine.starterRoutines
+        }
+
+        guard let data = stretchingRoutinesData.data(using: .utf8),
+              let routines = try? JSONDecoder().decode([StretchingRoutine].self, from: data) else {
+            return StretchingRoutine.starterRoutines
+        }
+
+        return routines
+    }
+
+    private var stretchingEntries: [StretchingEntry] {
+        guard let data = stretchingEntriesData.data(using: .utf8),
+              let entries = try? JSONDecoder().decode([StretchingEntry].self, from: data) else {
+            return []
+        }
+        return entries
+    }
+
+    private var eveningRoutine: StretchingRoutine? {
+        let usableRoutines = stretchingRoutines.filter { $0.exercises.isEmpty == false }
+        return usableRoutines.first { $0.occasion == .evening }
+            ?? usableRoutines.first { $0.occasion == .both }
+    }
+
     private func startWorkout() {
         activeWorkout = Workout(date: Date())
         selectedTab = .log
+    }
+
+    private func openEveningStretching() {
+        if let eveningRoutine {
+            var routineForEvening = eveningRoutine
+            routineForEvening.occasion = .evening
+            homeStretchingSheet = .log(routineForEvening)
+        } else {
+            homeStretchingSheet = .edit(
+                StretchingRoutine(name: "Abendroutine", occasion: .evening, exercises: [])
+            )
+        }
     }
 
     private func continueWorkout(_ workout: Workout) {
@@ -227,6 +293,49 @@ struct ContentView: View {
             workoutPlanTemplatesData = encodedPlans
         }
     }
+
+    private func saveStretchingRoutine(_ routine: StretchingRoutine) {
+        let trimmedName = routine.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedName.isEmpty == false else { return }
+
+        var routines = stretchingRoutines
+        let updatedRoutine = StretchingRoutine(
+            id: routine.id,
+            name: trimmedName,
+            occasion: routine.occasion,
+            exercises: routine.exercises.filter {
+                $0.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+            }
+        )
+
+        if let index = routines.firstIndex(where: { $0.id == routine.id }) {
+            routines[index] = updatedRoutine
+        } else {
+            routines.append(updatedRoutine)
+        }
+        persistStretchingRoutines(routines)
+    }
+
+    private func deleteStretchingRoutine(_ routineID: UUID) {
+        persistStretchingRoutines(stretchingRoutines.filter { $0.id != routineID })
+    }
+
+    private func persistStretchingRoutines(_ routines: [StretchingRoutine]) {
+        if let data = try? JSONEncoder().encode(routines),
+           let encoded = String(data: data, encoding: .utf8) {
+            stretchingRoutinesData = encoded
+        }
+    }
+
+    private func saveStretchingEntry(_ entry: StretchingEntry) {
+        var entries = stretchingEntries
+        entries.append(entry)
+
+        if let data = try? JSONEncoder().encode(entries),
+           let encoded = String(data: data, encoding: .utf8) {
+            stretchingEntriesData = encoded
+        }
+    }
 }
 
 private struct ExerciseTemplatePreset: Identifiable, Codable, Hashable {
@@ -323,6 +432,106 @@ private struct WorkoutPlanTemplate: Identifiable, Codable, Hashable {
     ]
 }
 
+private enum StretchingOccasion: String, Codable, CaseIterable, Identifiable {
+    case afterWorkout
+    case evening
+    case both
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .afterWorkout: "Nach dem Workout"
+        case .evening: "Abends"
+        case .both: "Beides"
+        }
+    }
+}
+
+private struct StretchingExercise: Identifiable, Codable, Hashable {
+    let id: UUID
+    var name: String
+    var durationSeconds: Int
+
+    init(id: UUID = UUID(), name: String, durationSeconds: Int = 45) {
+        self.id = id
+        self.name = name
+        self.durationSeconds = durationSeconds
+    }
+}
+
+private struct StretchingRoutine: Identifiable, Codable, Hashable {
+    let id: UUID
+    var name: String
+    var occasion: StretchingOccasion
+    var exercises: [StretchingExercise]
+
+    init(
+        id: UUID = UUID(),
+        name: String,
+        occasion: StretchingOccasion,
+        exercises: [StretchingExercise]
+    ) {
+        self.id = id
+        self.name = name
+        self.occasion = occasion
+        self.exercises = exercises
+    }
+
+    var totalMinutes: Int {
+        max(1, Int(ceil(Double(exercises.reduce(0) { $0 + $1.durationSeconds }) / 60)))
+    }
+
+    static let starterRoutines = [
+        StretchingRoutine(
+            name: "Nach dem Training",
+            occasion: .afterWorkout,
+            exercises: [
+                StretchingExercise(name: "Brust und Schultern"),
+                StretchingExercise(name: "Hüftbeuger"),
+                StretchingExercise(name: "Beinrückseite")
+            ]
+        ),
+        StretchingRoutine(
+            name: "Abendroutine",
+            occasion: .evening,
+            exercises: [
+                StretchingExercise(name: "Nacken und Schultern", durationSeconds: 60),
+                StretchingExercise(name: "Rückenrotation", durationSeconds: 60),
+                StretchingExercise(name: "Hüfte und Beine", durationSeconds: 90)
+            ]
+        )
+    ]
+}
+
+private struct StretchingEntry: Identifiable, Codable {
+    let id: UUID
+    let date: Date
+    let routineID: UUID
+    let routineName: String
+    let occasion: StretchingOccasion
+    let durationMinutes: Int
+    let notes: String
+
+    init(
+        id: UUID = UUID(),
+        date: Date = Date(),
+        routineID: UUID,
+        routineName: String,
+        occasion: StretchingOccasion,
+        durationMinutes: Int,
+        notes: String
+    ) {
+        self.id = id
+        self.date = date
+        self.routineID = routineID
+        self.routineName = routineName
+        self.occasion = occasion
+        self.durationMinutes = durationMinutes
+        self.notes = notes
+    }
+}
+
 private enum AppTab {
     case home
     case log
@@ -330,9 +539,19 @@ private enum AppTab {
 }
 
 private struct HomeView: View {
+    let workouts: [Workout]
+    let stretchingEntries: [StretchingEntry]
+    let eveningRoutine: StretchingRoutine?
     let lastWorkout: Workout?
     let startWorkout: () -> Void
     let continueWorkout: (Workout) -> Void
+    let openEveningStretching: () -> Void
+
+    private var eveningStretchingCompletedToday: Bool {
+        stretchingEntries.contains {
+            Calendar.current.isDateInToday($0.date) && $0.occasion == .evening
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -343,11 +562,20 @@ private struct HomeView: View {
                 VStack(alignment: .leading, spacing: 26) {
                     HeaderView()
                     StartWorkoutButton(action: startWorkout)
+                    EveningStretchingButton(
+                        routine: eveningRoutine,
+                        isCompletedToday: eveningStretchingCompletedToday,
+                        action: openEveningStretching
+                    )
                     LastWorkoutCard(
                         workout: lastWorkout,
                         continueWorkout: continueWorkout
                     )
-                    ProgressCard()
+                    TrainingCalendarCard(
+                        workouts: workouts,
+                        stretchingEntries: stretchingEntries,
+                        continueWorkout: continueWorkout
+                    )
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 58)
@@ -355,6 +583,60 @@ private struct HomeView: View {
             }
         }
         .hideNavigationBarForLanding()
+    }
+}
+
+private struct EveningStretchingButton: View {
+    let routine: StretchingRoutine?
+    let isCompletedToday: Bool
+    let action: () -> Void
+
+    private var title: String {
+        if routine == nil { return "Abendroutine anlegen" }
+        return isCompletedToday ? "Abend-Stretching erledigt" : "Abend-Stretching"
+    }
+
+    private var subtitle: String {
+        guard let routine else {
+            return "Lege deine erste Routine fest"
+        }
+        return "\(routine.name) · ca. \(routine.totalMinutes) Min."
+    }
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 14) {
+                Image(systemName: isCompletedToday ? "checkmark.circle.fill" : "moon.stars.fill")
+                    .font(.system(size: 21, weight: .semibold))
+                    .foregroundStyle(isCompletedToday ? AppColor.trainingGreen : AppColor.stretchingBlue)
+                    .frame(width: 42, height: 42)
+                    .background(AppColor.inputBackground)
+                    .clipShape(Circle())
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(title)
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundStyle(.primaryText)
+                    Text(subtitle)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(.secondaryText)
+                        .lineLimit(1)
+                }
+
+                Spacer(minLength: 4)
+
+                Image(systemName: routine == nil ? "plus" : "chevron.right")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(AppColor.trainingGreen)
+            }
+            .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 66)
+            .background(AppColor.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(title)
     }
 }
 
@@ -612,17 +894,25 @@ private struct WorkoutLoggingView: View {
     let workouts: [Workout]
     let exerciseTemplates: [ExerciseTemplatePreset]
     let workoutPlans: [WorkoutPlanTemplate]
+    let stretchingRoutines: [StretchingRoutine]
     let finishWorkout: (Workout) -> Void
     let cancelWorkout: () -> Void
     let saveExerciseTemplate: (String) -> Void
     let saveWorkoutPlan: (WorkoutPlanTemplate) -> Void
     let deleteWorkoutPlan: (UUID) -> Void
+    let saveStretchingRoutine: (StretchingRoutine) -> Void
+    let deleteStretchingRoutine: (UUID) -> Void
+    let saveStretchingEntry: (StretchingEntry) -> Void
     let continueWorkout: (Workout) -> Void
     let importWorkouts: ([Workout]) -> Void
     let deleteAllWorkouts: () -> Void
     @State private var historyFilter: WorkoutHistoryFilter = .all
+    @State private var selectedHistoryYear: Int?
+    @State private var selectedHistoryMonth: Int?
     @State private var selectedPlanID: UUID?
     @State private var editingWorkoutPlan: WorkoutPlanTemplate?
+    @State private var selectedStretchingRoutineID: UUID?
+    @State private var stretchingSheet: StretchingSheet?
     @State private var isImporterPresented = false
     @State private var importPreviewWorkouts: [Workout] = []
     @State private var importErrorMessage: String?
@@ -645,6 +935,11 @@ private struct WorkoutLoggingView: View {
                             startWorkoutPlan: startWorkoutPlan,
                             editSelectedPlan: editSelectedPlan,
                             createWorkoutPlan: createWorkoutPlan,
+                            stretchingRoutines: stretchingRoutines,
+                            selectedStretchingRoutineID: $selectedStretchingRoutineID,
+                            startStretching: startStretching,
+                            editStretchingRoutine: editStretchingRoutine,
+                            createStretchingRoutine: createStretchingRoutine,
                             importCSV: {
                                 isImporterPresented = true
                             },
@@ -666,6 +961,8 @@ private struct WorkoutLoggingView: View {
                     WorkoutHistorySection(
                         workouts: workouts,
                         selectedFilter: $historyFilter,
+                        selectedYear: $selectedHistoryYear,
+                        selectedMonth: $selectedHistoryMonth,
                         continueWorkout: continueWorkout
                     )
                 }
@@ -697,6 +994,21 @@ private struct WorkoutLoggingView: View {
                 deletePlan: deleteWorkoutPlan,
                 startPlan: startWorkoutPlan
             )
+        }
+        .sheet(item: $stretchingSheet) { sheet in
+            switch sheet {
+            case .edit(let routine):
+                StretchingRoutineEditorView(
+                    routine: routine,
+                    saveRoutine: saveStretchingRoutine,
+                    deleteRoutine: deleteStretchingRoutine
+                )
+            case .log(let routine):
+                StretchingSessionView(
+                    routine: routine,
+                    saveEntry: saveStretchingEntry
+                )
+            }
         }
         .alert("CSV konnte nicht importiert werden", isPresented: importErrorIsPresented) {
             Button("OK") {
@@ -798,6 +1110,33 @@ private struct WorkoutLoggingView: View {
             exerciseNames: []
         )
     }
+
+    private func startStretching(_ routine: StretchingRoutine) {
+        selectedStretchingRoutineID = routine.id
+        stretchingSheet = .log(routine)
+    }
+
+    private func editStretchingRoutine(_ routine: StretchingRoutine) {
+        stretchingSheet = .edit(routine)
+    }
+
+    private func createStretchingRoutine() {
+        stretchingSheet = .edit(
+            StretchingRoutine(name: "Neue Routine", occasion: .evening, exercises: [])
+        )
+    }
+}
+
+private enum StretchingSheet: Identifiable {
+    case edit(StretchingRoutine)
+    case log(StretchingRoutine)
+
+    var id: String {
+        switch self {
+        case .edit(let routine): "edit-\(routine.id)"
+        case .log(let routine): "log-\(routine.id)"
+        }
+    }
 }
 
 private struct EmptyWorkoutView: View {
@@ -807,6 +1146,11 @@ private struct EmptyWorkoutView: View {
     let startWorkoutPlan: (WorkoutPlanTemplate) -> Void
     let editSelectedPlan: () -> Void
     let createWorkoutPlan: () -> Void
+    let stretchingRoutines: [StretchingRoutine]
+    @Binding var selectedStretchingRoutineID: UUID?
+    let startStretching: (StretchingRoutine) -> Void
+    let editStretchingRoutine: (StretchingRoutine) -> Void
+    let createStretchingRoutine: () -> Void
     let importCSV: () -> Void
     let deleteAllWorkouts: () -> Void
     let hasWorkouts: Bool
@@ -876,6 +1220,14 @@ private struct EmptyWorkoutView: View {
             StartWorkoutButton(title: "Leeres Workout starten", systemImage: "plus", action: startWorkout)
                 .padding(.horizontal, 26)
 
+            StretchingRoutineSection(
+                routines: stretchingRoutines,
+                selectedRoutineID: $selectedStretchingRoutineID,
+                startRoutine: startStretching,
+                editRoutine: editStretchingRoutine,
+                createRoutine: createStretchingRoutine
+            )
+
             VStack(spacing: 12) {
                 Button(action: importCSV) {
                     Label("Legacy CSV importieren", systemImage: "tray.and.arrow.down")
@@ -908,6 +1260,124 @@ private struct EmptyWorkoutView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 32)
+    }
+}
+
+private struct StretchingRoutineSection: View {
+    let routines: [StretchingRoutine]
+    @Binding var selectedRoutineID: UUID?
+    let startRoutine: (StretchingRoutine) -> Void
+    let editRoutine: (StretchingRoutine) -> Void
+    let createRoutine: () -> Void
+
+    private var selectedRoutine: StretchingRoutine? {
+        routines.first { $0.id == selectedRoutineID } ?? routines.first
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 5) {
+                Text("Stretching-Routinen")
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundStyle(.primaryText)
+
+                Text("Für nach dem Training oder deine Abendroutine.")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.secondaryText)
+            }
+            .padding(.horizontal, 6)
+
+            LazyVStack(spacing: 12) {
+                ForEach(routines) { routine in
+                    Button {
+                        selectedRoutineID = routine.id
+                    } label: {
+                        StretchingRoutineTile(
+                            routine: routine,
+                            isSelected: selectedRoutineID == routine.id ||
+                                (selectedRoutineID == nil && routine.id == routines.first?.id)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            HStack(spacing: 12) {
+                Button {
+                    if let selectedRoutine { startRoutine(selectedRoutine) }
+                } label: {
+                    Label("Starten", systemImage: "play.fill")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(PrimaryCompactButtonStyle())
+                .disabled(selectedRoutine == nil)
+
+                Button {
+                    if let selectedRoutine { editRoutine(selectedRoutine) }
+                } label: {
+                    Label("Bearbeiten", systemImage: "pencil")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(SecondaryCompactButtonStyle())
+                .disabled(selectedRoutine == nil)
+            }
+
+            Button(action: createRoutine) {
+                Label("Neue Stretching-Routine", systemImage: "plus")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(AppColor.trainingGreen)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+                    .background(AppColor.inputBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 26)
+        .onAppear {
+            if selectedRoutineID == nil { selectedRoutineID = routines.first?.id }
+        }
+    }
+}
+
+private struct StretchingRoutineTile: View {
+    let routine: StretchingRoutine
+    let isSelected: Bool
+
+    var body: some View {
+        HStack(spacing: 14) {
+            IconBadge(systemName: "figure.flexibility")
+                .scaleEffect(0.82)
+                .frame(width: 46, height: 46)
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text(routine.name)
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundStyle(.primaryText)
+
+                Text("\(routine.occasion.title) · ca. \(routine.totalMinutes) Min. · \(routine.exercises.count) Übungen")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.secondaryText)
+                    .lineLimit(2)
+            }
+
+            Spacer(minLength: 4)
+
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .font(.system(size: 21, weight: .semibold))
+                .foregroundStyle(isSelected ? AppColor.trainingGreen : .secondaryText)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(.cardBackground)
+                .shadow(color: .black.opacity(0.05), radius: 12, x: 0, y: 7)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(isSelected ? AppColor.trainingGreen : Color.clear, lineWidth: 2)
+        }
     }
 }
 
@@ -1138,6 +1608,7 @@ private struct WorkoutPlanEditorView: View {
                                         TextField("Planname", text: $plan.name)
                                             .font(.system(size: 26, weight: .bold))
                                             .foregroundStyle(.primaryText)
+                                            .tint(AppColor.trainingGreen)
                                     }
                                 }
 
@@ -1237,6 +1708,8 @@ private struct WorkoutPlanEditorView: View {
                                         .textInputAutocapitalization(.words)
                                         .submitLabel(.done)
                                         .onSubmit(addTypedExercise)
+                                        .foregroundStyle(.primaryText)
+                                        .tint(AppColor.trainingGreen)
                                         .padding(14)
                                         .background(AppColor.inputBackground)
                                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -1431,6 +1904,293 @@ private struct WorkoutPlanExerciseRow: View {
         .frame(minHeight: 48)
         .background(AppColor.inputBackground)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+}
+
+private struct StretchingRoutineEditorView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var routine: StretchingRoutine
+    @State private var newExerciseName = ""
+    @State private var isDeleteConfirmationPresented = false
+    let saveRoutine: (StretchingRoutine) -> Void
+    let deleteRoutine: (UUID) -> Void
+
+    init(
+        routine: StretchingRoutine,
+        saveRoutine: @escaping (StretchingRoutine) -> Void,
+        deleteRoutine: @escaping (UUID) -> Void
+    ) {
+        _routine = State(initialValue: routine)
+        self.saveRoutine = saveRoutine
+        self.deleteRoutine = deleteRoutine
+    }
+
+    private var canSave: Bool {
+        routine.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
+    }
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                AppColor.pageBackground.ignoresSafeArea()
+
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 18) {
+                        DashboardCard {
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack(spacing: 16) {
+                                    IconBadge(systemName: "figure.flexibility")
+                                    TextField("Name der Routine", text: $routine.name)
+                                        .font(.system(size: 24, weight: .bold))
+                                        .foregroundStyle(.primaryText)
+                                        .tint(AppColor.trainingGreen)
+                                }
+
+                                Picker("Zeitpunkt", selection: $routine.occasion) {
+                                    ForEach(StretchingOccasion.allCases) { occasion in
+                                        Text(occasion.title).tag(occasion)
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                            }
+                        }
+
+                        DashboardCard {
+                            VStack(alignment: .leading, spacing: 14) {
+                                Text("Übungen")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundStyle(.primaryText)
+
+                                if routine.exercises.isEmpty {
+                                    Text("Füge die einzelnen Dehnübungen deiner Routine hinzu.")
+                                        .font(.system(size: 15))
+                                        .foregroundStyle(.secondaryText)
+                                }
+
+                                ForEach($routine.exercises) { $exercise in
+                                    HStack(spacing: 10) {
+                                        TextField("Dehnübung", text: $exercise.name)
+                                            .foregroundStyle(.primaryText)
+                                            .tint(AppColor.trainingGreen)
+
+                                        Stepper(
+                                            "\(exercise.durationSeconds) Sek.",
+                                            value: $exercise.durationSeconds,
+                                            in: 15...300,
+                                            step: 15
+                                        )
+                                        .labelsHidden()
+
+                                        Text("\(exercise.durationSeconds) s")
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundStyle(.secondaryText)
+                                            .frame(width: 44, alignment: .trailing)
+
+                                        Button {
+                                            routine.exercises.removeAll { $0.id == exercise.id }
+                                        } label: {
+                                            Image(systemName: "minus.circle")
+                                                .font(.system(size: 20))
+                                                .foregroundStyle(.secondaryText)
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                    .padding(12)
+                                    .background(AppColor.inputBackground)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                }
+
+                                HStack(spacing: 12) {
+                                    TextField("Neue Dehnübung", text: $newExerciseName)
+                                        .foregroundStyle(.primaryText)
+                                        .tint(AppColor.trainingGreen)
+                                        .padding(14)
+                                        .background(AppColor.inputBackground)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                        .onSubmit(addExercise)
+
+                                    Button(action: addExercise) {
+                                        Image(systemName: "plus")
+                                            .font(.system(size: 19, weight: .semibold))
+                                            .foregroundStyle(.white)
+                                            .frame(width: 48, height: 48)
+                                            .background(AppColor.trainingGreen)
+                                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel("Dehnübung hinzufügen")
+                                }
+                            }
+                        }
+
+                        Button(role: .destructive) {
+                            isDeleteConfirmationPresented = true
+                        } label: {
+                            Label("Routine löschen", systemImage: "trash")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(Color.red.opacity(0.85))
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 46)
+                                .background(AppColor.inputBackground)
+                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(20)
+                    .padding(.bottom, 80)
+                }
+            }
+            .navigationTitle("Routine bearbeiten")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Schließen") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Sichern", action: saveAndDismiss)
+                        .disabled(canSave == false)
+                }
+            }
+            .confirmationDialog("Routine löschen?", isPresented: $isDeleteConfirmationPresented) {
+                Button("Routine löschen", role: .destructive) {
+                    deleteRoutine(routine.id)
+                    dismiss()
+                }
+                Button("Abbrechen", role: .cancel) {}
+            }
+        }
+    }
+
+    private func addExercise() {
+        let name = newExerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard name.isEmpty == false else { return }
+        routine.exercises.append(StretchingExercise(name: name))
+        newExerciseName = ""
+    }
+
+    private func saveAndDismiss() {
+        guard canSave else { return }
+        saveRoutine(routine)
+        dismiss()
+    }
+}
+
+private struct StretchingSessionView: View {
+    @Environment(\.dismiss) private var dismiss
+    let routine: StretchingRoutine
+    let saveEntry: (StretchingEntry) -> Void
+    @State private var occasion: StretchingOccasion
+    @State private var durationMinutes: Int
+    @State private var notes = ""
+
+    init(routine: StretchingRoutine, saveEntry: @escaping (StretchingEntry) -> Void) {
+        self.routine = routine
+        self.saveEntry = saveEntry
+        _occasion = State(initialValue: routine.occasion == .both ? .afterWorkout : routine.occasion)
+        _durationMinutes = State(initialValue: routine.totalMinutes)
+    }
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                AppColor.pageBackground.ignoresSafeArea()
+
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 18) {
+                        DashboardCard {
+                            HStack(spacing: 16) {
+                                IconBadge(systemName: "figure.flexibility")
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(routine.name)
+                                        .font(.system(size: 24, weight: .bold))
+                                        .foregroundStyle(.primaryText)
+                                    Text("\(routine.exercises.count) Übungen · ca. \(routine.totalMinutes) Min.")
+                                        .font(.system(size: 15, weight: .medium))
+                                        .foregroundStyle(.secondaryText)
+                                }
+                            }
+                        }
+
+                        DashboardCard {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Ablauf")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundStyle(.primaryText)
+
+                                ForEach(Array(routine.exercises.enumerated()), id: \.element.id) { index, exercise in
+                                    HStack(spacing: 12) {
+                                        Text("\(index + 1)")
+                                            .font(.system(size: 14, weight: .bold))
+                                            .foregroundStyle(AppColor.trainingGreen)
+                                            .frame(width: 24)
+                                        Text(exercise.name)
+                                            .font(.system(size: 16, weight: .semibold))
+                                            .foregroundStyle(.primaryText)
+                                        Spacer()
+                                        Text("\(exercise.durationSeconds) s")
+                                            .font(.system(size: 14, weight: .medium))
+                                            .foregroundStyle(.secondaryText)
+                                    }
+                                    .padding(.vertical, 6)
+                                }
+                            }
+                        }
+
+                        DashboardCard {
+                            VStack(alignment: .leading, spacing: 16) {
+                                Text("Abschluss")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .foregroundStyle(.primaryText)
+
+                                Picker("Zeitpunkt", selection: $occasion) {
+                                    Text("Nach Workout").tag(StretchingOccasion.afterWorkout)
+                                    Text("Abends").tag(StretchingOccasion.evening)
+                                }
+                                .pickerStyle(.segmented)
+
+                                Stepper("Dauer: \(durationMinutes) Minuten", value: $durationMinutes, in: 1...60)
+                                    .foregroundStyle(.primaryText)
+
+                                TextField("Notiz (optional)", text: $notes, axis: .vertical)
+                                    .foregroundStyle(.primaryText)
+                                    .tint(AppColor.trainingGreen)
+                                    .padding(14)
+                                    .background(AppColor.inputBackground)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            }
+                        }
+
+                        Button(action: completeSession) {
+                            Label("Stretching abschließen", systemImage: "checkmark")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(PrimaryCompactButtonStyle())
+                    }
+                    .padding(20)
+                    .padding(.bottom, 40)
+                }
+            }
+            .navigationTitle("Stretching")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Abbrechen") { dismiss() }
+                }
+            }
+        }
+    }
+
+    private func completeSession() {
+        saveEntry(
+            StretchingEntry(
+                routineID: routine.id,
+                routineName: routine.name,
+                occasion: occasion,
+                durationMinutes: durationMinutes,
+                notes: notes.trimmingCharacters(in: .whitespacesAndNewlines)
+            )
+        )
+        dismiss()
     }
 }
 
@@ -1971,6 +2731,7 @@ private struct WorkoutSummaryCard: View {
                         TextField("Workout-Name", text: $workout.title)
                             .font(.system(size: 26, weight: .bold))
                             .foregroundStyle(.primaryText)
+                            .tint(AppColor.trainingGreen)
 
                         DatePicker("Datum", selection: $workout.date, displayedComponents: .date)
                             .labelsHidden()
@@ -1987,6 +2748,8 @@ private struct WorkoutSummaryCard: View {
                 TextField("Notiz zum Workout", text: $workout.notes, axis: .vertical)
                     .lineLimit(2...4)
                     .textFieldStyle(.plain)
+                    .foregroundStyle(.primaryText)
+                    .tint(AppColor.trainingGreen)
                     .padding(14)
                     .background(AppColor.inputBackground)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -2109,6 +2872,8 @@ private struct AddExerciseCard: View {
                         .textInputAutocapitalization(.words)
                         .submitLabel(.done)
                         .onSubmit(addExercise)
+                        .foregroundStyle(.primaryText)
+                        .tint(AppColor.trainingGreen)
                         .padding(14)
                         .background(AppColor.inputBackground)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -2164,6 +2929,7 @@ private struct ExerciseLoggingCard: View {
                         TextField("Übung", text: $exercise.name)
                             .font(.system(size: 22, weight: .bold))
                             .foregroundStyle(.primaryText)
+                            .tint(AppColor.trainingGreen)
 
                         Text("\(exercise.sets.count) Sets")
                             .font(.system(size: 15))
@@ -2214,6 +2980,8 @@ private struct ExerciseLoggingCard: View {
                 TextField("Notiz zur Übung", text: $exercise.notes, axis: .vertical)
                     .lineLimit(1...3)
                     .textFieldStyle(.plain)
+                    .foregroundStyle(.primaryText)
+                    .tint(AppColor.trainingGreen)
                     .padding(14)
                     .background(AppColor.inputBackground)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -2299,6 +3067,8 @@ private struct SetEntryRow: View {
 
                 TextField("Notiz", text: $set.notes)
                     .textFieldStyle(.plain)
+                    .foregroundStyle(.primaryText)
+                    .tint(AppColor.trainingGreen)
                     .padding(.horizontal, 12)
                     .frame(height: 42)
                     .background(AppColor.inputBackground)
@@ -2374,6 +3144,8 @@ private struct WorkoutNumberField: View {
         TextField(title, text: $text)
             .keyboardType(.decimalPad)
             .font(.system(size: 17, weight: .medium))
+            .foregroundStyle(.primaryText)
+            .tint(AppColor.trainingGreen)
             .multilineTextAlignment(.center)
             .padding(.horizontal, 10)
             .frame(height: 42)
@@ -2402,8 +3174,6 @@ private struct EmptyExerciseHint: View {
 private enum WorkoutHistoryFilter: String, CaseIterable, Identifiable {
     case all = "Alle"
     case year = "Jahr"
-    case month = "Monat"
-    case week = "Woche"
 
     var id: String { rawValue }
 }
@@ -2411,15 +3181,65 @@ private enum WorkoutHistoryFilter: String, CaseIterable, Identifiable {
 private struct WorkoutHistorySection: View {
     let workouts: [Workout]
     @Binding var selectedFilter: WorkoutHistoryFilter
+    @Binding var selectedYear: Int?
+    @Binding var selectedMonth: Int?
     let continueWorkout: (Workout) -> Void
 
     private let columns = [
         GridItem(.adaptive(minimum: 155), spacing: 14)
     ]
 
+    private var calendar: Calendar {
+        Calendar.current
+    }
+
+    private var availableYears: [Int] {
+        Set(workouts.map { calendar.component(.year, from: $0.date) })
+            .sorted(by: >)
+    }
+
+    private var resolvedYear: Int? {
+        if let selectedYear, availableYears.contains(selectedYear) {
+            return selectedYear
+        }
+
+        return availableYears.first
+    }
+
+    private var availableMonths: [WorkoutHistoryMonth] {
+        guard let resolvedYear else {
+            return []
+        }
+
+        let months = Dictionary(grouping: workouts.filter { workout in
+            calendar.component(.year, from: workout.date) == resolvedYear
+        }) { workout in
+            calendar.component(.month, from: workout.date)
+        }
+
+        return months
+            .map { month, workouts in
+                WorkoutHistoryMonth(month: month, count: workouts.count)
+            }
+            .sorted { $0.month > $1.month }
+    }
+
+    private var resolvedMonth: Int? {
+        if let selectedMonth, availableMonths.contains(where: { $0.month == selectedMonth }) {
+            return selectedMonth
+        }
+
+        return availableMonths.first?.month
+    }
+
     private var filteredWorkouts: [Workout] {
         workouts.filter { workout in
-            selectedFilter.contains(workout.date)
+            selectedFilter.contains(
+                workout.date,
+                year: resolvedYear,
+                month: resolvedMonth,
+                calendar: calendar
+            )
         }
     }
 
@@ -2446,8 +3266,21 @@ private struct WorkoutHistorySection: View {
             }
             .pickerStyle(.segmented)
 
+            if selectedFilter == .year {
+                WorkoutHistoryMonthPicker(
+                    availableYears: availableYears,
+                    selectedYear: selectedYearBinding,
+                    months: availableMonths,
+                    selectedMonth: selectedMonthBinding
+                )
+            }
+
             if filteredWorkouts.isEmpty {
-                EmptyWorkoutHistoryCard(filter: selectedFilter)
+                EmptyWorkoutHistoryCard(
+                    filter: selectedFilter,
+                    year: resolvedYear,
+                    month: resolvedMonth
+                )
             } else {
                 LazyVGrid(columns: columns, spacing: 14) {
                     ForEach(filteredWorkouts) { workout in
@@ -2464,6 +3297,177 @@ private struct WorkoutHistorySection: View {
                 }
             }
         }
+        .onAppear(perform: normalizeSelection)
+        .onChange(of: selectedFilter) { _, _ in
+            normalizeSelection()
+        }
+        .onChange(of: workouts.map(\.id)) { _, _ in
+            normalizeSelection()
+        }
+    }
+
+    private var selectedYearBinding: Binding<Int> {
+        Binding(
+            get: { resolvedYear ?? Calendar.current.component(.year, from: Date()) },
+            set: { newYear in
+                selectedYear = newYear
+                let firstMonth = availableMonths(for: newYear).first?.month
+                selectedMonth = firstMonth
+            }
+        )
+    }
+
+    private var selectedMonthBinding: Binding<Int> {
+        Binding(
+            get: { resolvedMonth ?? 1 },
+            set: { selectedMonth = $0 }
+        )
+    }
+
+    private func normalizeSelection() {
+        guard selectedFilter == .year else {
+            return
+        }
+
+        if selectedYear == nil || availableYears.contains(selectedYear ?? 0) == false {
+            selectedYear = availableYears.first
+        }
+
+        let months = availableMonths
+        if selectedMonth == nil || months.contains(where: { $0.month == selectedMonth }) == false {
+            selectedMonth = months.first?.month
+        }
+    }
+
+    private func availableMonths(for year: Int) -> [WorkoutHistoryMonth] {
+        let months = Dictionary(grouping: workouts.filter { workout in
+            calendar.component(.year, from: workout.date) == year
+        }) { workout in
+            calendar.component(.month, from: workout.date)
+        }
+
+        return months
+            .map { month, workouts in
+                WorkoutHistoryMonth(month: month, count: workouts.count)
+            }
+            .sorted { $0.month > $1.month }
+    }
+}
+
+private struct WorkoutHistoryMonth: Identifiable {
+    var id: Int { month }
+    let month: Int
+    let count: Int
+}
+
+private struct WorkoutHistoryMonthPicker: View {
+    let availableYears: [Int]
+    @Binding var selectedYear: Int
+    let months: [WorkoutHistoryMonth]
+    @Binding var selectedMonth: Int
+
+    private let monthFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateFormat = "MMMM"
+        return formatter
+    }()
+
+    private var selectedMonthEntry: WorkoutHistoryMonth? {
+        months.first { $0.month == selectedMonth }
+    }
+
+    private var selectedMonthText: String {
+        guard let selectedMonthEntry else {
+            return "Monat"
+        }
+
+        return "\(monthTitle(selectedMonthEntry.month)) · \(selectedMonthEntry.count)"
+    }
+
+    var body: some View {
+        HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Jahr")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondaryText)
+
+                Menu {
+                    ForEach(availableYears, id: \.self) { year in
+                        Button(yearText(year)) {
+                            selectedYear = year
+                        }
+                    }
+                } label: {
+                    FilterMenuButton(title: yearText(selectedYear))
+                }
+                .disabled(availableYears.isEmpty)
+            }
+            .frame(maxWidth: .infinity)
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Monat")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondaryText)
+
+                Menu {
+                    if months.isEmpty {
+                        Text("Keine Workouts")
+                    } else {
+                        ForEach(months) { month in
+                            Button("\(monthTitle(month.month)) · \(month.count) Workouts") {
+                                selectedMonth = month.month
+                            }
+                        }
+                    }
+                } label: {
+                    FilterMenuButton(title: selectedMonthText)
+                }
+                .disabled(months.isEmpty)
+            }
+            .frame(maxWidth: .infinity)
+        }
+    }
+
+    private func yearText(_ year: Int) -> String {
+        String(year)
+    }
+
+    private func monthTitle(_ month: Int) -> String {
+        var components = DateComponents()
+        components.year = selectedYear
+        components.month = month
+        components.day = 1
+
+        guard let date = Calendar.current.date(from: components) else {
+            return "\(month)"
+        }
+
+        return monthFormatter.string(from: date)
+    }
+}
+
+private struct FilterMenuButton: View {
+    let title: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(title)
+                .font(.system(size: 15, weight: .semibold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.78)
+
+            Spacer(minLength: 4)
+
+            Image(systemName: "chevron.down")
+                .font(.system(size: 12, weight: .bold))
+        }
+        .foregroundStyle(AppColor.trainingGreen)
+        .padding(.horizontal, 12)
+        .frame(maxWidth: .infinity)
+        .frame(height: 44)
+        .background(AppColor.inputBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
 
@@ -2814,6 +3818,8 @@ private struct HistoryStatPill: View {
 
 private struct EmptyWorkoutHistoryCard: View {
     let filter: WorkoutHistoryFilter
+    let year: Int?
+    let month: Int?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -2842,34 +3848,47 @@ private struct EmptyWorkoutHistoryCard: View {
         case .all:
             return "Sobald du ein Workout speicherst, erscheint es hier."
         case .year:
-            return "Für dieses Jahr gibt es noch keine gespeicherten Workouts."
-        case .month:
-            return "Für diesen Monat gibt es noch keine gespeicherten Workouts."
-        case .week:
-            return "Für diese Woche gibt es noch keine gespeicherten Workouts."
+            guard let year, let month else {
+                return "Für dieses Jahr gibt es noch keine gespeicherten Workouts."
+            }
+
+            return "Für \(monthName(month)) \(year) gibt es noch keine gespeicherten Workouts."
         }
+    }
+
+    private func monthName(_ month: Int) -> String {
+        var components = DateComponents()
+        components.year = year
+        components.month = month
+        components.day = 1
+
+        guard let date = Calendar.current.date(from: components) else {
+            return "Monat \(month)"
+        }
+
+        return date.formatted(.dateTime.month(.wide).locale(Locale(identifier: "de_DE")))
     }
 }
 
 private extension WorkoutHistoryFilter {
-    func contains(_ date: Date, calendar: Calendar = .current) -> Bool {
-        let now = Date()
-
+    func contains(_ date: Date, year: Int?, month: Int?, calendar: Calendar = .current) -> Bool {
         switch self {
         case .all:
             return true
         case .year:
-            return calendar.isDate(date, equalTo: now, toGranularity: .year)
-        case .month:
-            return calendar.isDate(date, equalTo: now, toGranularity: .month)
-        case .week:
-            return calendar.isDate(date, equalTo: now, toGranularity: .weekOfYear)
+            guard let year, let month else {
+                return false
+            }
+
+            return calendar.component(.year, from: date) == year &&
+                calendar.component(.month, from: date) == month
         }
     }
 }
 
 private struct AnalyticsView: View {
     let workouts: [Workout]
+    let stretchingEntries: [StretchingEntry]
     let continueWorkout: (Workout) -> Void
     @State private var selectedExerciseID: String?
     @State private var selectedPeriod: AnalyticsPeriod = .all
@@ -2913,6 +3932,7 @@ private struct AnalyticsView: View {
 
                     TrainingCalendarCard(
                         workouts: workouts,
+                        stretchingEntries: stretchingEntries,
                         continueWorkout: continueWorkout
                     )
 
@@ -3789,6 +4809,7 @@ private struct WorkoutConsistencyCard: View {
 
 private struct TrainingCalendarCard: View {
     let workouts: [Workout]
+    let stretchingEntries: [StretchingEntry]
     let continueWorkout: (Workout) -> Void
     @State private var monthOffset = 0
 
@@ -3802,7 +4823,7 @@ private struct TrainingCalendarCard: View {
     }
 
     private var referenceDate: Date {
-        workouts.map(\.date).max() ?? Date()
+        (workouts.map(\.date) + stretchingEntries.map(\.date)).max() ?? Date()
     }
 
     private var displayedMonth: Date {
@@ -3817,6 +4838,10 @@ private struct TrainingCalendarCard: View {
             result[calendar.startOfDay(for: workout.date)] = workout
         }
         return result
+    }
+
+    private var stretchingDays: Set<Date> {
+        Set(stretchingEntries.map { calendar.startOfDay(for: $0.date) })
     }
 
     private var monthCells: [TrainingCalendarDay] {
@@ -3840,6 +4865,14 @@ private struct TrainingCalendarCard: View {
         workoutsByDay.keys.filter { calendar.isDate($0, equalTo: displayedMonth, toGranularity: .month) }.count
     }
 
+    private var stretchingDaysInMonth: Int {
+        stretchingDays.filter { calendar.isDate($0, equalTo: displayedMonth, toGranularity: .month) }.count
+    }
+
+    private var calendarSubtitle: String {
+        "\(trainingDaysInMonth) Training · \(stretchingDaysInMonth) Stretching"
+    }
+
     var body: some View {
         DashboardCard {
             VStack(alignment: .leading, spacing: 16) {
@@ -3847,7 +4880,7 @@ private struct TrainingCalendarCard: View {
                     AnalyticsSectionHeader(
                         icon: "calendar",
                         title: "Trainingskalender",
-                        subtitle: "\(trainingDaysInMonth) Trainingstage im Monat"
+                        subtitle: calendarSubtitle
                     )
 
                     Spacer()
@@ -3877,6 +4910,7 @@ private struct TrainingCalendarCard: View {
 
                 HStack(spacing: 16) {
                     CalendarLegendDot(color: AppColor.trainingGreen, text: "Training")
+                    CalendarLegendDot(color: AppColor.stretchingBlue, text: "Stretching")
                     CalendarLegendDot(color: AppColor.inputBackground, text: "Pausentag")
                 }
             }
@@ -3901,7 +4935,9 @@ private struct TrainingCalendarCard: View {
     @ViewBuilder
     private func calendarCell(_ cell: TrainingCalendarDay) -> some View {
         if let date = cell.date {
-            let workout = workoutsByDay[calendar.startOfDay(for: date)]
+            let day = calendar.startOfDay(for: date)
+            let workout = workoutsByDay[day]
+            let hasStretching = stretchingDays.contains(day)
 
             if let workout {
                 NavigationLink {
@@ -3910,11 +4946,11 @@ private struct TrainingCalendarCard: View {
                         continueWorkout: continueWorkout
                     )
                 } label: {
-                    CalendarDayView(date: date, isTrainingDay: true)
+                    CalendarDayView(date: date, isTrainingDay: true, hasStretching: hasStretching)
                 }
                 .buttonStyle(.plain)
             } else {
-                CalendarDayView(date: date, isTrainingDay: false)
+                CalendarDayView(date: date, isTrainingDay: false, hasStretching: hasStretching)
             }
         } else {
             Color.clear
@@ -3931,6 +4967,7 @@ private struct TrainingCalendarDay: Identifiable {
 private struct CalendarDayView: View {
     let date: Date
     let isTrainingDay: Bool
+    let hasStretching: Bool
 
     var body: some View {
         Text("\(Calendar.current.component(.day, from: date))")
@@ -3945,9 +4982,26 @@ private struct CalendarDayView: View {
                         .stroke(AppColor.deepGreen, lineWidth: 2)
                 }
             }
+            .overlay(alignment: .bottomTrailing) {
+                if hasStretching {
+                    Circle()
+                        .fill(AppColor.stretchingBlue)
+                        .frame(width: 9, height: 9)
+                        .overlay(Circle().stroke(Color.white, lineWidth: 1.5))
+                }
+            }
             .accessibilityLabel(
-                "\(date.formatted(date: .long, time: .omitted)), \(isTrainingDay ? "Training" : "Pausentag")"
+                "\(date.formatted(date: .long, time: .omitted)), \(dayDescription)"
             )
+    }
+
+    private var dayDescription: String {
+        switch (isTrainingDay, hasStretching) {
+        case (true, true): "Training und Stretching"
+        case (true, false): "Training"
+        case (false, true): "Stretching"
+        case (false, false): "Pausentag"
+        }
     }
 }
 
@@ -4128,6 +5182,7 @@ private enum AppColor {
     static let inputBackground = Color(red: 0.958, green: 0.957, blue: 0.945)
     static let trainingGreen = Color(red: 0.376, green: 0.522, blue: 0.403)
     static let deepGreen = Color(red: 0.129, green: 0.231, blue: 0.164)
+    static let stretchingBlue = Color(red: 0.278, green: 0.475, blue: 0.584)
 }
 
 private extension ShapeStyle where Self == Color {
